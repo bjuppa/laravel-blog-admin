@@ -41,7 +41,7 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Bjuppa\\LaravelBlogAdmin\\BlogServiceProvider"
+        "Bjuppa\\LaravelBlogAdmin\\BlogAdminServiceProvider"
       ],
       "aliases": {}
     }
