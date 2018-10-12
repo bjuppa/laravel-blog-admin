@@ -1,0 +1,48 @@
+{
+  "name": "bjuppa/laravel-blog-admin",
+  "description": "Optional admin interface for bjuppa/laravel-blog",
+  "keywords": [
+    "laravel",
+    "blog",
+    "admin"
+  ],
+  "homepage": "https://github.com/bjuppa/laravel-blog-admin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Björn Nilsved",
+      "email": "nilsved@gmail.com"
+    }
+  ],
+  "require": {
+  },
+  "require-dev": {
+    "orchestra/testbench": "~3.6",
+    "laravel/framework": ">=5.6.25",
+    "phpunit/phpunit": ">6.5",
+    "mockery/mockery": "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bjuppa\\LaravelBlogAdmin\\": "src/",
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Bjuppa\\LaravelBlogAdmin\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "post-update-cmd": "@clearCompiledViews",
+    "clearCompiledViews": "rm -f vendor/orchestra/testbench-core/laravel/storage/framework/views/*"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Bjuppa\\LaravelBlogAdmin\\BlogServiceProvider"
+      ],
+      "aliases": {}
+    }
+  }
+}
