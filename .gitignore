@@ -1,3 +1,12 @@
 vendor/
 node_modules/
 npm-debug.log
+composer.phar
+composer.lock
+.DS_Store
+Thumbs.db
+/phpunit.xml
+/.idea
+/build
+.phpunit.result.cache
+/dist/mix-manifest.json
