@@ -1,5 +1,13 @@
 # Package development & testing
 
+## Install for development within a Laravel app
+
+1. Remove any existing directory `vendor/bjuppa/laravel-blog-admin`
+2. Install the package from git using `composer install --prefer-source`
+3. Run `cd vendor/bjuppa/laravel-blog-admin` and `composer install` to install dependencies within the package.
+
+## Testing
+
 Run `composer test` from the project directory to start the default test suite.
 
 Logs created during test runs can be found in `vendor/orchestra/testbench-core/laravel/storage/logs/`
