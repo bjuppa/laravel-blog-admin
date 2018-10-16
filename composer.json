@@ -15,7 +15,7 @@
     }
   ],
   "require": {
-    "kontenta/kontour": "^0.3"
+    "kontenta/kontour": "dev-master"
   },
   "require-dev": {
     "orchestra/testbench": "~3.6",
