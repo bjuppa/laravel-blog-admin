@@ -2,10 +2,11 @@
 
 namespace Bjuppa\LaravelBlogAdmin;
 
+use Bjuppa\LaravelBlog\Contracts\Blog;
+use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Illuminate\Support\ServiceProvider;
 use Kontenta\Kontour\Concerns\RegistersAdminRoutes;
 use Kontenta\Kontour\Concerns\RegistersMenuWidgetLinks;
-use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 
 class BlogAdminServiceProvider extends ServiceProvider
 {
@@ -27,7 +28,9 @@ class BlogAdminServiceProvider extends ServiceProvider
     {
         $this->registerAdminRoutes(__DIR__ . '/../routes/blog-admin.php');
         $this->registerResources();
-        $this->registerMenuLinks();
+        $blogRegistry->all()->each(function (Blog $blog) {
+            $this->addMenuWidgetRoute('blog-admin.blog.show', $blog->getTitle());
+        });
     }
 
     protected function registerMenuLinks()
