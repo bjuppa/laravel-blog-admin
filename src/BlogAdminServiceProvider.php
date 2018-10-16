@@ -4,10 +4,12 @@ namespace Bjuppa\LaravelBlogAdmin;
 
 use Illuminate\Support\ServiceProvider;
 use Kontenta\Kontour\Concerns\RegistersAdminRoutes;
+use Kontenta\Kontour\Concerns\RegistersMenuWidgetLinks;
+use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 
 class BlogAdminServiceProvider extends ServiceProvider
 {
-    use RegistersAdminRoutes;
+    use RegistersAdminRoutes, RegistersMenuWidgetLinks;
 
     /**
      * Register bindings in the container.
@@ -21,11 +23,16 @@ class BlogAdminServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      *
      */
-    public function boot()
+    public function boot(BlogRegistry $blogRegistry)
     {
         $this->registerAdminRoutes(__DIR__ . '/../routes/blog-admin.php');
-
         $this->registerResources();
+        $this->registerMenuLinks();
+    }
+
+    protected function registerMenuLinks()
+    {
+        //$this->addMenuWidgetRoute();
     }
 
     /**
