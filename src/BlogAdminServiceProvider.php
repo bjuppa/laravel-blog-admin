@@ -28,14 +28,11 @@ class BlogAdminServiceProvider extends ServiceProvider
     {
         $this->registerAdminRoutes(__DIR__ . '/../routes/blog-admin.php');
         $this->registerResources();
-        $blogRegistry->all()->each(function (Blog $blog) {
-            $this->addMenuWidgetRoute('blog-admin.blog.show', $blog->getTitle());
+        $this->app->booted(function() use ($blogRegistry) {
+            $blogRegistry->all()->each(function (Blog $blog) {
+                $this->addMenuWidgetRoute($blog->getTitle(), 'blog-admin.blog.show', $blog->getId(), 'Blogs');
+            });
         });
-    }
-
-    protected function registerMenuLinks()
-    {
-        //$this->addMenuWidgetRoute();
     }
 
     /**
