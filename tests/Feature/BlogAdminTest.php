@@ -32,4 +32,11 @@ class BlogAdminTest extends IntegrationTest
         $response->assertStatus(200);
         $response->assertSee('>Main Blog</h1>');
     }
+
+    public function test_menu_links()
+    {
+        $response = $this->actingAs($this->user)->get(route('blog-admin.blog.show', 'main'));
+
+        $response->assertSee('>Main Blog</a>');
+    }
 }
