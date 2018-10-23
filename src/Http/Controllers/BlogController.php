@@ -21,10 +21,14 @@ class BlogController extends BaseController
      */
     public function show($id)
     {
+        abort_unless($this->blogRegistry->has($id), 404);
+
         $blog = $this->blogRegistry->get($id);
+        $entryProvider = $blog->getEntryProvider();
+        //TODO: Put warning in message widget if blog does not have a \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider
 
-        abort_unless($blog, 404);
+        $entries = $entryProvider->getBuilder()->withUnpublished()->get();
 
-        return view('blog-admin::blog.show', compact('blog'));
+        return view('blog-admin::blog.show', compact('blog', 'entries'));
     }
 }

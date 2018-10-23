@@ -5,6 +5,7 @@ namespace Bjuppa\LaravelBlogAdmin\Tests\Feature;
 use Bjuppa\LaravelBlogAdmin\Tests\Feature\Fakes\User;
 use Bjuppa\LaravelBlogAdmin\Tests\IntegrationTest;
 use Illuminate\Support\Facades\Route;
+use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 
 class BlogAdminTest extends IntegrationTest
 {
@@ -35,9 +36,11 @@ class BlogAdminTest extends IntegrationTest
 
     public function test_show_blog_page()
     {
+        $entry = factory(BlogEntry::class)->create();
         $response = $this->actingAs($this->user)->get(route('blog-admin.blogs.show', 'main'));
 
         $response->assertStatus(200);
         $response->assertSee('>Main Blog</h1>');
+        $response->assertSee('>'. $entry->getTitle().'</a>');
     }
 }
