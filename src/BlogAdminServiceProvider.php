@@ -29,7 +29,9 @@ class BlogAdminServiceProvider extends ServiceProvider
         $this->registerAdminRoutes(__DIR__ . '/../routes/blog-admin.php');
         $this->registerResources();
         $this->app->booted(function() use ($blogRegistry) {
-            $blogRegistry->all()->each(function (Blog $blog) {
+            $blogRegistry->all()->filter(function($blog) {
+                return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
+            })->each(function (Blog $blog) {
                 $this->addMenuWidgetRoute($blog->getTitle(), 'blog-admin.blogs.show', $blog->getId(), 'Blogs');
             });
         });
