@@ -79,6 +79,7 @@ abstract class IntegrationTest extends TestCase
         $this->loadRegisteredMigrations();
 
         $this->withFactories(__DIR__ . '/../database/factories');
+        $this->withFactories(__DIR__ . '/../vendor/bjuppa/laravel-blog/database/factories');
     }
 
     /**
