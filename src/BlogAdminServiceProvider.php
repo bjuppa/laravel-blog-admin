@@ -30,7 +30,7 @@ class BlogAdminServiceProvider extends ServiceProvider
         $this->registerResources();
         $this->app->booted(function() use ($blogRegistry) {
             $blogRegistry->all()->each(function (Blog $blog) {
-                $this->addMenuWidgetRoute($blog->getTitle(), 'blog-admin.blog.show', $blog->getId(), 'Blogs');
+                $this->addMenuWidgetRoute($blog->getTitle(), 'blog-admin.blogs.show', $blog->getId(), 'Blogs');
             });
         });
     }
