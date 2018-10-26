@@ -10,5 +10,6 @@
 <form action="{{ route('blog-admin.entries.update', $entry->getKey()) }}" method="POST">
 @method('PUT')
 @csrf
+@include('blog-admin::entry.partials.formFields')
 </form>
 @append
