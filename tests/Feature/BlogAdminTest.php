@@ -4,8 +4,8 @@ namespace Bjuppa\LaravelBlogAdmin\Tests\Feature;
 
 use Bjuppa\LaravelBlogAdmin\Tests\Feature\Fakes\User;
 use Bjuppa\LaravelBlogAdmin\Tests\IntegrationTest;
-use Illuminate\Support\Facades\Route;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
+use Illuminate\Support\Facades\Route;
 
 class BlogAdminTest extends IntegrationTest
 {
@@ -41,7 +41,7 @@ class BlogAdminTest extends IntegrationTest
 
         $response->assertStatus(200);
         $response->assertSee('>Main Blog</h1>');
-        $response->assertSee('>'. $entry->getTitle().'</a>');
+        $response->assertSee('>' . $entry->getTitle() . '</a>');
     }
 
     public function test_edit_entry_page()
@@ -50,5 +50,17 @@ class BlogAdminTest extends IntegrationTest
         $response = $this->actingAs($this->user)->get(route('blog-admin.entries.edit', $entry->getKey()));
 
         $response->assertStatus(200);
+        $response->assertSee('value="PUT"');
+    }
+
+    public function test_entry_can_be_updated()
+    {
+        $entry = factory(BlogEntry::class)->create();
+        $formData = [
+
+        ];
+        $response = $this->actingAs($this->user)->put(route('blog-admin.entries.update', $entry->getKey()), $formData);
+
+        $response->assertRedirect(route('blog-admin.entries.edit', $entry->getKey()));
     }
 }
