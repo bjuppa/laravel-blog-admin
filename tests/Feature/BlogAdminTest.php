@@ -57,10 +57,12 @@ class BlogAdminTest extends IntegrationTest
     {
         $entry = factory(BlogEntry::class)->create();
         $formData = [
-
+            'title' => 'Replaced title'
         ];
         $response = $this->actingAs($this->user)->put(route('blog-admin.entries.update', $entry->getKey()), $formData);
 
         $response->assertRedirect(route('blog-admin.entries.edit', $entry->getKey()));
+        $entry->refresh();
+        $this->assertEquals('Replaced title', $entry->title);
     }
 }
