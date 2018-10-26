@@ -43,4 +43,12 @@ class BlogAdminTest extends IntegrationTest
         $response->assertSee('>Main Blog</h1>');
         $response->assertSee('>'. $entry->getTitle().'</a>');
     }
+
+    public function test_edit_entry_page()
+    {
+        $entry = factory(BlogEntry::class)->create();
+        $response = $this->actingAs($this->user)->get(route('blog-admin.entries.edit', $entry->getKey()));
+
+        $response->assertStatus(200);
+    }
 }
