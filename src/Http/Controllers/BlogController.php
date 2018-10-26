@@ -13,12 +13,6 @@ class BlogController extends BaseController
         $this->blogRegistry = $blogRegistry;
     }
 
-    /**
-     * Show the profile for the given user.
-     *
-     * @param  int  $id
-     * @return Response
-     */
     public function show($id)
     {
         abort_unless($this->blogRegistry->has($id), 404);
