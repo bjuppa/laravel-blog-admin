@@ -7,7 +7,8 @@
 @append
 
 @section($view_manager->toolMainSection())
-<form>
+<form action="{{ route('blog-admin.entries.update', $entry->getKey()) }}" method="POST">
+@method('PUT')
 @csrf
 </form>
 @append
