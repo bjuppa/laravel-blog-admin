@@ -5,12 +5,14 @@ namespace Bjuppa\LaravelBlogAdmin;
 use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Illuminate\Support\ServiceProvider;
+use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\RegistersAdminRoutes;
-use Kontenta\Kontour\Concerns\RegistersMenuWidgetLinks;
+use Kontenta\Kontour\Contracts\AdminBootManager;
+use Kontenta\Kontour\Contracts\MenuWidget;
 
 class BlogAdminServiceProvider extends ServiceProvider
 {
-    use RegistersAdminRoutes, RegistersMenuWidgetLinks;
+    use RegistersAdminRoutes;
 
     /**
      * Register bindings in the container.
@@ -24,15 +26,16 @@ class BlogAdminServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      *
      */
-    public function boot(BlogRegistry $blogRegistry)
+    public function boot(BlogRegistry $blogRegistry, AdminBootManager $adminBootManager)
     {
         $this->registerAdminRoutes(__DIR__ . '/../routes/blog-admin.php');
         $this->registerResources();
-        $this->app->booted(function() use ($blogRegistry) {
-            $blogRegistry->all()->filter(function($blog) {
+
+        $adminBootManager->beforeRoute(function (BlogRegistry $blogRegistry, MenuWidget $menuWidget) {
+            $blogRegistry->all()->filter(function ($blog) {
                 return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
-            })->each(function (Blog $blog) {
-                $this->addMenuWidgetRoute($blog->getTitle(), 'blog-admin.blogs.show', $blog->getId(), 'Blogs');
+            })->each(function (Blog $blog) use ($menuWidget) {
+                $menuWidget->addLink(AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId())), 'Blogs');
             });
         });
     }
