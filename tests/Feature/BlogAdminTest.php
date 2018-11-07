@@ -42,6 +42,7 @@ class BlogAdminTest extends IntegrationTest
         $response->assertStatus(200);
         $response->assertSee('>Main Blog</h1>');
         $response->assertSee('>' . $entry->getTitle() . '</a>');
+        $response->assertSee('href="'.route('blog-admin.entries.create', 'main').'"');
     }
 
     public function test_edit_entry_page()
