@@ -56,7 +56,7 @@ class BlogAdminTest extends IntegrationTest
     public function test_entry_can_be_stored()
     {
         $formData = [
-            'blog_id' => 'main',
+            'blog' => 'main',
             'title' => 'A new blog post',
             'content' => 'It’s so pointless we just call it content.'
         ];

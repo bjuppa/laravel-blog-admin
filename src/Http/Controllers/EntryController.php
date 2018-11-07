@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 
 class EntryController extends BaseController
 {
-    public function create($blog_id)
+    public function create($blog)
     {
         $entry = new BlogEntry();
-        $entry->blog_id = $blog_id;
+        $entry->blog = $blog;
 
         return view('blog-admin::entry.create', compact('entry'));
     }

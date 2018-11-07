@@ -9,7 +9,7 @@
 @section($view_manager->toolMainSection())
 <form action="{{ route('blog-admin.entries.store') }}" method="POST">
 @csrf
-<input type="hidden" name="blog_id" value="{{ $entry->blog_id }}">
+<input type="hidden" name="blog" value="{{ $entry->blog }}">
 @include('blog-admin::entry.partials.formFields')
 <button type="submit">{{ __('Create new blog entry') }}</button>
 </form>
