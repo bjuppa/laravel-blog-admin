@@ -11,6 +11,6 @@
 @method('PUT')
 @csrf
 @include('blog-admin::entry.partials.formFields')
-<button type="submit">{{ __('Save changes to blog entry'))</button>
+<button type="submit">{{ __('Save changes to blog entry') }}</button>
 </form>
 @append
