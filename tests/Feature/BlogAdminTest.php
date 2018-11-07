@@ -45,6 +45,14 @@ class BlogAdminTest extends IntegrationTest
         $response->assertSee('href="'.route('blog-admin.entries.create', 'main').'"');
     }
 
+    public function test_create_entry_page()
+    {
+        $response = $this->actingAs($this->user)->get(route('blog-admin.entries.create', 'main'));
+
+        $response->assertStatus(200);
+        $response->assertSee('value="main"');
+    }
+
     public function test_edit_entry_page()
     {
         $entry = factory(BlogEntry::class)->create();

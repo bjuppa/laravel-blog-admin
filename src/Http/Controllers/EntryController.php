@@ -8,6 +8,14 @@ use Illuminate\Http\Request;
 
 class EntryController extends BaseController
 {
+    public function create($blog_id)
+    {
+        $entry = new BlogEntry();
+        $entry->blog_id = $blog_id;
+
+        return view('blog-admin::entry.create', compact('entry'));
+    }
+
     public function edit($id)
     {
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
