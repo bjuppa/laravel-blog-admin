@@ -11,6 +11,6 @@
 @csrf
 <input type="hidden" name="blog_id" value="{{ $entry->blog_id }}">
 @include('blog-admin::entry.partials.formFields')
-<button type="submit">{{ __('Create'))</button>
+<button type="submit">{{ __('Create new blog entry') }}</button>
 </form>
 @append
