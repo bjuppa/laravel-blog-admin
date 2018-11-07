@@ -53,6 +53,18 @@ class BlogAdminTest extends IntegrationTest
         $response->assertSee('value="main"');
     }
 
+    public function test_entry_can_be_stored()
+    {
+        $formData = [
+            'blog_id' => 'main',
+            'title' => 'A new blog post',
+            'content' => 'It’s so pointless we just call it content.'
+        ];
+        $response = $this->actingAs($this->user)->post(route('blog-admin.entries.store'), $formData);
+
+        $response->assertRedirect(route('blog-admin.entries.edit', 1));
+    }
+
     public function test_edit_entry_page()
     {
         $entry = factory(BlogEntry::class)->create();

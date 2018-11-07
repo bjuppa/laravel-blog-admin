@@ -16,6 +16,13 @@ class EntryController extends BaseController
         return view('blog-admin::entry.create', compact('entry'));
     }
 
+    public function store(Request $request)
+    {
+        $entry = BlogEntry::create($request->all());
+
+        return redirect(route('blog-admin.entries.edit', $entry->getKey()));
+    }
+
     public function edit($id)
     {
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
