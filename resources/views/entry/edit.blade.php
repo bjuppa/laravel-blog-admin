@@ -11,5 +11,6 @@
 @method('PUT')
 @csrf
 @include('blog-admin::entry.partials.formFields')
+<button type="submit">Save</button>
 </form>
 @append
