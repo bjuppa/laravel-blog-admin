@@ -6,6 +6,7 @@ use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Bjuppa\LaravelBlogAdmin\Http\Requests\StoreBlogEntry;
+use Bjuppa\LaravelBlogAdmin\Http\Requests\UpdateBlogEntry;
 
 //TODO: rename EntryController to BlogEntryController
 class EntryController extends BaseController
@@ -32,7 +33,7 @@ class EntryController extends BaseController
         return view('blog-admin::entry.edit', compact('entry'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateBlogEntry $request, $id)
     {
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
 
