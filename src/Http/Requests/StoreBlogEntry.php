@@ -26,6 +26,7 @@ class StoreBlogEntry extends FormRequest
         return [
             'title' => 'required',
             'content' => 'required',
+            'blog' => 'filled',
         ];
     }
 }
