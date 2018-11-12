@@ -5,6 +5,7 @@ namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
+use Bjuppa\LaravelBlogAdmin\Http\Requests\StoreBlogEntry;
 
 class EntryController extends BaseController
 {
@@ -16,7 +17,7 @@ class EntryController extends BaseController
         return view('blog-admin::entry.create', compact('entry'));
     }
 
-    public function store(Request $request)
+    public function store(StoreBlogEntry $request)
     {
         $entry = BlogEntry::create($request->all());
 
