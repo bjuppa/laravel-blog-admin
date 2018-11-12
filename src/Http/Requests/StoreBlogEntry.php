@@ -2,21 +2,8 @@
 
 namespace Bjuppa\LaravelBlogAdmin\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
-
-class StoreBlogEntry extends FormRequest
+class StoreBlogEntry extends SaveBlogEntry
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        // TODO: authorize user against blog
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -24,10 +11,9 @@ class StoreBlogEntry extends FormRequest
      */
     public function rules()
     {
-        return [
-            'title' => 'required',
-            'content' => 'required',
-            'blog' => 'filled',
-        ];
+        return array_merge_recursive(parent::rules(), [
+            'title' => ['required'],
+            'content' => ['required'],
+        ]);
     }
 }
