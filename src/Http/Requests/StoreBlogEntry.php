@@ -13,6 +13,7 @@ class StoreBlogEntry extends FormRequest
      */
     public function authorize()
     {
+        // TODO: authorize user against blog
         return true;
     }
 
