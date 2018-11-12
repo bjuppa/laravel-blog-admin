@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Http\Request;
 use Bjuppa\LaravelBlogAdmin\Http\Requests\StoreBlogEntry;
 
+//TODO: rename EntryController to BlogEntryController
 class EntryController extends BaseController
 {
     public function create($blog)
