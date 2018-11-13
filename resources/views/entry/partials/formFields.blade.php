@@ -1,4 +1,4 @@
-@include('blog-admin::forms.input', ['name' => 'title'])
+@include('blog-admin::forms.input', ['name' => 'title', 'controlAttributes' => ['required']])
 
 <label for="entry.content">Content</label>
 <div>
