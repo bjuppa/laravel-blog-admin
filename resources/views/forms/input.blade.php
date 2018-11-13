@@ -5,11 +5,5 @@
   value="{{ old($name, $value ?? $slot ?? isset($model) ? $model->$name : '') }}"
   @include('blog-admin::forms.partials.inputAttributes', ['errorsId' => ($errorsId = $controlId . 'Errors')])
 >
-@if($errors->has($name))
-<ul id="{{ $errorsId }}">
-  @foreach($errors->get($name) as $message)
-    <li>{{ $message }}</li>
-  @endforeach
-</ul>
-@endif
+@include('blog-admin::forms.partials.errors', ['errorsId' => $errorsId])
 </div>
