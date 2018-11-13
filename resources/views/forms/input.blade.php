@@ -2,9 +2,9 @@
 <div>
 <input
   type="{{ $type ?? 'text' }}"
-  id="{{ $controlId }}"
   value="{{ old($name, $value ?? $slot ?? isset($model) ? $model->$name : '') }}"
   name="{{ $name }}"
+  id="{{ $controlId }}"
   @if($errors->has($name))
     aria-invalid="true"
     aria-describedby="{{ $errorId = $controlId . 'Errors' }}"
