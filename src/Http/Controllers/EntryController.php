@@ -21,7 +21,7 @@ class EntryController extends BaseController
 
     public function store(StoreBlogEntry $request)
     {
-        $entry = BlogEntry::create($request->all());
+        $entry = BlogEntry::create($request->validated());
 
         return redirect(route('blog-admin.entries.edit', $entry->getKey()));
     }
@@ -37,7 +37,7 @@ class EntryController extends BaseController
     {
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
 
-        $entry->update($request->all());
+        $entry->update($request->validated());
 
         return redirect(route('blog-admin.entries.edit', $entry->getKey()));
     }
