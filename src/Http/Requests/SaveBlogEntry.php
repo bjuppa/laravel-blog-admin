@@ -25,9 +25,20 @@ abstract class SaveBlogEntry extends FormRequest
     public function rules()
     {
         return [
-            'title' => ['filled'],
-            'content' => ['filled'],
-            'blog' => ['filled'],
+            'blog' => ['filled', 'string'],
+            'publish_after' => ['nullable', 'date'],
+            'slug' => ['filled', 'string', 'max:255'],
+            'title' => ['filled', 'string', 'max:255'],
+            'author_name' => ['nullable', 'string', 'max:255'],
+            'author_email' => ['nullable', 'email', 'max:255'],
+            'author_url' => ['nullable', 'url', 'max:255'],
+            'image' => ['nullable', 'string'],
+            'content' => ['filled', 'string'],
+            'summary' => ['nullable', 'string'],
+            'page_title' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string', 'max:255'],
+            'meta_tags' => ['nullable', 'json'],
+            'display_full_content_in_feed' => ['nullable', 'boolean'],
         ];
     }
 }
