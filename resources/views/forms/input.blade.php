@@ -1,7 +1,7 @@
 @include('blog-admin::forms.partials.label', ['controlId' => $controlId = $controlId ?? (($idPrefix ?? '') . $name)])
 <div>
 <input type="{{ $type ?? 'text' }}"
-  value="{{ old($name, $value ?? $slot ?? isset($model[$name]) ? $model[$name] : '') }}"
+  value="{{ old($name, $value ?? $slot ?? $model[$name] ?? '') }}"
   @include('blog-admin::forms.partials.inputAttributes', ['errorsId' => $errorsId = $controlId . ($errorsSuffix ?? 'Errors')])
 >
 @include('blog-admin::forms.partials.errors', ['errorsId' => $errorsId])

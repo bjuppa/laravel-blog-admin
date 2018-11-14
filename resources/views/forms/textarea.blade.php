@@ -2,6 +2,6 @@
 <div>
 <textarea
   @include('blog-admin::forms.partials.inputAttributes', ['errorsId' => $errorsId = $controlId . ($errorsSuffix ?? 'Errors')])
->{{ old($name, $value ?? $slot ?? isset($model[$name]) ? $model[$name] : '') }}</textarea>
+>{{ old($name, $value ?? $slot ?? $model[$name] ?? '') }}</textarea>
 @include('blog-admin::forms.partials.errors', ['errorsId' => $errorsId])
 </div>
