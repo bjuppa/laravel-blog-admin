@@ -27,7 +27,7 @@ abstract class SaveBlogEntry extends FormRequest
         return [
             'blog' => ['filled', 'string'],
             'publish_after' => ['nullable', 'date'],
-            'slug' => ['filled', 'string', 'max:255'],
+            'slug' => ['filled', 'alpha_dash', 'max:255'],
             'title' => ['filled', 'string', 'max:255'],
             'author_name' => ['nullable', 'string', 'max:255'],
             'author_email' => ['nullable', 'email', 'max:255'],
