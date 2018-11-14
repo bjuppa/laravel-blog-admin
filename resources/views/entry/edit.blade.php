@@ -10,7 +10,7 @@
 <form action="{{ route('blog-admin.entries.update', $entry->getKey()) }}" method="POST">
 @method('PUT')
 @csrf
-@include('blog-admin::entry.partials.formFields')
+@include('blog-admin::entry.partials.formFields', ['model' => $entry])
 <button type="submit">{{ __('Save changes to blog entry') }}</button>
 </form>
 @append
