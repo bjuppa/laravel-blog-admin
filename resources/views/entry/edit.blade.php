@@ -2,11 +2,16 @@
 
 @extends($view_manager->toolLayout())
 
-@section($view_manager->toolHeaderSection())
-
-@append
-
 @section($view_manager->toolMainSection())
+Status:
+@if($entry->isPublic())
+  Public since {{ $entry->getPublished() }}
+@elseif($entry->getPublished()->isFuture())
+  Scheduled for publishing {{ $entry->getPublished() }}
+@else
+  Not scheduled for publishing
+@endif
+
 <form action="{{ route('blog-admin.entries.update', $entry->getKey()) }}" method="POST">
 @method('PUT')
 @csrf
