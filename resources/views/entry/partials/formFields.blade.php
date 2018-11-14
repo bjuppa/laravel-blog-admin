@@ -5,6 +5,7 @@
 @include('blog-admin::forms.input', ['name' => 'author_email'])
 @include('blog-admin::forms.input', ['name' => 'author_url'])
 @include('blog-admin::forms.textarea', ['name' => 'image'])
+{{ $entry->getImage() }}
 @include('blog-admin::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
 @include('blog-admin::forms.textarea', ['name' => 'summary'])
 @include('blog-admin::forms.input', ['name' => 'page_title'])
