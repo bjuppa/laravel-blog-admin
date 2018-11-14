@@ -37,7 +37,7 @@ abstract class SaveBlogEntry extends FormRequest
             'summary' => ['nullable', 'string'],
             'page_title' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string', 'max:255'],
-            'meta_tags' => ['nullable', 'json'],
+            'json_meta_tags' => ['nullable', 'json'],
             'display_full_content_in_feed' => ['nullable', 'boolean'],
         ];
     }
