@@ -3,7 +3,8 @@
 @extends($view_manager->toolLayout())
 
 @section($view_manager->toolMainSection())
-Status:
+
+<p>
 @if($entry->isPublic())
   Public since {{ $entry->getPublished() }}
 @elseif($entry->getPublished()->isFuture())
@@ -11,6 +12,7 @@ Status:
 @else
   Not scheduled for publishing
 @endif
+</p>
 
 <form action="{{ route('blog-admin.entries.update', $entry->getKey()) }}" method="POST">
 @method('PUT')
