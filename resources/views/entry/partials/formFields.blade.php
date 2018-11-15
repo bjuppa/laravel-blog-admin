@@ -6,6 +6,7 @@
 @endif
 
 @include('blog-admin::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
+@include('blog-admin::forms.checkbox', ['name' => 'display_full_content_in_feed'])
 @include('blog-admin::forms.textarea', ['name' => 'summary'])
 @include('blog-admin::forms.textarea', ['name' => 'image'])
 <samp>{{ $entry->getImage() }}</samp>
