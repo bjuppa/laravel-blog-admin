@@ -5,7 +5,7 @@
   >
     @foreach($options as $option_value => $option_display)
       <option
-            @if(old($name, $model[$name] ?? false) == $option_value)
+      @if(old($name, $model[$name] ?? false) === $option_value or (isset($model) and $option_value === '' and !isset($model[$name])))
               selected
             @endif
             value="{{ $option_value }}"

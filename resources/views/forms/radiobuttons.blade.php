@@ -4,7 +4,7 @@
     @component('blog-admin::forms.label', ['label' => $option_display])
       @slot('labelStart')
         <input type="radio"
-          @if(old($name, $model[$name] ?? false) === $option_value)
+          @if(old($name, $model[$name] ?? false) === $option_value or (isset($model) and $option_value === '' and !isset($model[$name])))
             checked
           @endif
           value="{{ $option_value }}"
