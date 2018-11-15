@@ -1,6 +1,7 @@
 @include('blog-admin::forms.input', ['name' => 'title', 'controlAttributes' => ['required']])
 
 @if($entry->exists)
+  @include('blog-admin::forms.select', ['name' => 'blog', 'options' => $blog_options])
   @include('blog-admin::forms.input', ['name' => 'slug'])
   @include('blog-admin::forms.input', ['name' => 'publish_after', 'type' => 'datetime-local'])
 @endif
