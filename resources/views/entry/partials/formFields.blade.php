@@ -1,5 +1,24 @@
-<label for="entry.title">Title</label>
-<input id="entry.title" type="text" name="title" value="{{ old('title', $entry->title) }}" required>
+@include('blog-admin::forms.input', ['name' => 'title', 'controlAttributes' => ['required']])
 
-<label for="entry.content">Content</label>
-<textarea id="entry.content" name="content" required>{{ old('content', $entry->content) }}</textarea>
+@if($entry->exists)
+  @include('blog-admin::forms.input', ['name' => 'slug'])
+@endif
+
+@include('blog-admin::forms.input', ['name' => 'publish_after', 'type' => 'datetime-local'])
+
+@include('blog-admin::forms.input', ['name' => 'author_name'])
+@include('blog-admin::forms.input', ['name' => 'author_email'])
+@include('blog-admin::forms.input', ['name' => 'author_url'])
+
+@include('blog-admin::forms.textarea', ['name' => 'image'])
+{{ $entry->getImage() }}
+
+@include('blog-admin::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
+
+@if($entry->exists)
+  @include('blog-admin::forms.textarea', ['name' => 'summary'])
+  @include('blog-admin::forms.input', ['name' => 'page_title'])
+  @include('blog-admin::forms.input', ['name' => 'description'])
+  @include('blog-admin::forms.textarea', ['name' => 'json_meta_tags'])
+  <pre>{{ $blog->getDefaultMetaTags()->merge($entry)->toHtml() }}</pre>
+@endif
