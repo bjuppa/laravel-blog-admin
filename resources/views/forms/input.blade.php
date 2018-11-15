@@ -1,4 +1,4 @@
-@include('blog-admin::forms.partials.label', ['controlId' => $controlId = $controlId ?? (($idPrefix ?? '') . $name)])
+@include('blog-admin::forms.label', ['controlId' => $controlId = $controlId ?? (($idPrefix ?? '') . $name)])
 <div>
   <input type="{{ $type ?? 'text' }}"
     value="{{ old($name, $value ?? $slot ?? $model[$name] ?? '') }}"
