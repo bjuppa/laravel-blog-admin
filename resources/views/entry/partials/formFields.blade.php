@@ -11,4 +11,4 @@
 @include('blog-admin::forms.input', ['name' => 'page_title'])
 @include('blog-admin::forms.input', ['name' => 'description'])
 @include('blog-admin::forms.textarea', ['name' => 'json_meta_tags'])
-<pre>{{ $entry->getMetaTagBag()->toHtml() }}</pre>
+<pre>{{ $blog->getDefaultMetaTags()->merge($entry)->toHtml() }}</pre>
