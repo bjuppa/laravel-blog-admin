@@ -6,7 +6,7 @@
 @endif
 
 @include('blog-admin::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
-@include('blog-admin::forms.checkbox', ['name' => 'display_full_content_in_feed'])
+@include('blog-admin::forms.radiobuttons', ['name' => 'display_full_content_in_feed', 'options' => ['' => 'Blog default', '1' => 'Display full content', '0' => 'Display summary or teaser with a link to read more']])
 @include('blog-admin::forms.textarea', ['name' => 'summary'])
 @include('blog-admin::forms.textarea', ['name' => 'image'])
 <samp>{{ $entry->getImage() }}</samp>
