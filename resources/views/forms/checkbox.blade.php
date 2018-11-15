@@ -1,5 +1,5 @@
 <div>
-  @component('blog-admin::forms.partials.label', compact('name'))
+  @component('blog-admin::forms.partials.label', ['name' => $name, 'label' => $label ?? null])
     @slot('labelStart')
       <input type="checkbox"
         @if(old($name, $checked ?? $model[$name] ?? false))
