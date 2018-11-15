@@ -2,9 +2,13 @@
 
 @if($entry->exists)
   @include('blog-admin::forms.input', ['name' => 'slug'])
+  @include('blog-admin::forms.input', ['name' => 'publish_after', 'type' => 'datetime-local'])
 @endif
 
-@include('blog-admin::forms.input', ['name' => 'publish_after', 'type' => 'datetime-local'])
+@include('blog-admin::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
+@include('blog-admin::forms.textarea', ['name' => 'summary'])
+@include('blog-admin::forms.textarea', ['name' => 'image'])
+<samp>{{ $entry->getImage() }}</samp>
 
 <fieldset>
   <legend>Author</legend>
@@ -13,14 +17,7 @@
   @include('blog-admin::forms.input', ['name' => 'author_url'])
 </fieldset>
 
-@include('blog-admin::forms.textarea', ['name' => 'image'])
-<samp>{{ $entry->getImage() }}</samp>
-
-@include('blog-admin::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
-
 @if($entry->exists)
-  @include('blog-admin::forms.textarea', ['name' => 'summary'])
-
   <fieldset>
     <legend>Meta-data</legend>
     @include('blog-admin::forms.input', ['name' => 'page_title'])
