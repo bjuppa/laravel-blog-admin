@@ -6,19 +6,26 @@
 
 @include('blog-admin::forms.input', ['name' => 'publish_after', 'type' => 'datetime-local'])
 
-@include('blog-admin::forms.input', ['name' => 'author_name'])
-@include('blog-admin::forms.input', ['name' => 'author_email'])
-@include('blog-admin::forms.input', ['name' => 'author_url'])
+<fieldset>
+  <legend>Author</legend>
+  @include('blog-admin::forms.input', ['name' => 'author_name'])
+  @include('blog-admin::forms.input', ['name' => 'author_email'])
+  @include('blog-admin::forms.input', ['name' => 'author_url'])
+</fieldset>
 
 @include('blog-admin::forms.textarea', ['name' => 'image'])
-{{ $entry->getImage() }}
+<samp>{{ $entry->getImage() }}</samp>
 
 @include('blog-admin::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
 
 @if($entry->exists)
   @include('blog-admin::forms.textarea', ['name' => 'summary'])
-  @include('blog-admin::forms.input', ['name' => 'page_title'])
-  @include('blog-admin::forms.input', ['name' => 'description'])
-  @include('blog-admin::forms.textarea', ['name' => 'json_meta_tags'])
-  <pre>{{ $blog->getDefaultMetaTags()->merge($entry)->toHtml() }}</pre>
+
+  <fieldset>
+    <legend>Meta-data</legend>
+    @include('blog-admin::forms.input', ['name' => 'page_title'])
+    @include('blog-admin::forms.input', ['name' => 'description'])
+    @include('blog-admin::forms.textarea', ['name' => 'json_meta_tags'])
+    <pre><samp>{{ $blog->getDefaultMetaTags()->merge($entry)->toHtml() }}</samp></pre>
+  </fieldset>
 @endif
