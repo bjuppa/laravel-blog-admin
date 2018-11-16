@@ -1,10 +1,10 @@
-<fieldset>
+<fieldset data-checked-radio="{{ $selected = old($name, $selected ?? $model[$name] ?? '') ?? '' }}">
   @include('blog-admin::forms.label', ['labelTag' => 'legend'])
   @foreach($options as $option_value => $option_display)
     @component('blog-admin::forms.label', ['label' => $option_display])
       @slot('labelStart')
         <input type="radio"
-          @if(old($name, $model[$name] ?? false) === $option_value or (isset($model) and $option_value === '' and !isset($model[$name])))
+          @if($selected === $option_value)
             checked
           @endif
           value="{{ $option_value }}"
