@@ -5,12 +5,20 @@
       @include('blog-admin::forms.partials.inputAttributes', ['name' => $name . '[]', 'errorsId' => $errorsId = $controlId . ($errorsSuffix ?? 'Errors')])
     >
       @foreach($options as $option_value => $option_display)
+        @if($optgroup = is_array($option_display) ? $option_value : false)
+        <optgroup label="{{ $optgroup }}">
+        @endif
+        @foreach($optgroup ? $option_display : [$option_value => $option_display] as $option_value => $option_display)
         <option
           @if(in_array($option_value, $selected))
             selected
           @endif
           value="{{ $option_value }}"
         >{!! $option_display !!}</option>
+        @endforeach
+        @if($optgroup)
+        </optgroup>
+        @endif
       @endforeach
     </select>
     @include('blog-admin::forms.partials.errors', ['errorsId' => $errorsId])
