@@ -1,6 +1,6 @@
 name="{{ $name }}"
 id="{{ $controlId }}"
-@if($errors->has($name))
+@if($errors->has(str_replace('[]', '', $name)))
   aria-invalid="true"
   aria-describedby="{{ $errorsId }}"
 @elseif(isset($ariaDescribedById))
