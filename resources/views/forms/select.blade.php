@@ -1,4 +1,4 @@
-<div data-selected-option="{{ $selected = old($name, $selected ?? $model[$name] ?? '') ?? '' }}">
+<div data-selected-option="{{ $selected = strval(old($name, $selected ?? $model[$name] ?? '')) }}">
   @include('blog-admin::forms.label', ['controlId' => $controlId = $controlId ?? (($idPrefix ?? '') . $name)])
   <div>
     <select
@@ -10,7 +10,7 @@
         @endif
         @foreach($optgroup ? $option_display : [$option_value => $option_display] as $option_value => $option_display)
         <option
-          @if($selected === $option_value)
+          @if($selected == strval($option_value))
             selected
           @endif
           value="{{ $option_value }}"
