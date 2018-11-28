@@ -1,7 +1,7 @@
 <fieldset data-checked-radio="{{ $selected = strval(old($name, $selected ?? $model[$name] ?? '')) }}">
   @include('blog-admin::forms.label', ['labelTag' => 'legend'])
   @foreach($options as $option_value => $option_display)
-    @if($legend = is_array($option_display) ? $option_value : false)
+    @if($legend = is_iterable($option_display) ? $option_value : false)
     <fieldset><legend>{{ $legend }}</legend>
     @endif
     @foreach($legend ? $option_display : [$option_value => $option_display] as $option_value => $option_display)

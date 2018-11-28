@@ -7,7 +7,7 @@ id="{{ $controlId }}"
   aria-describedby="{{ $ariaDescribedById }}"
 @endif
 @if(isset($controlAttributes))
-  @if(is_array($controlAttributes))
+  @if(is_iterable($controlAttributes))
     @foreach($controlAttributes as $attributeName => $attributeValue)
       @if(is_int($attributeName))
         {{ $attributeValue }}

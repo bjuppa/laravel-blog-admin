@@ -1,7 +1,7 @@
 <fieldset data-checked-checkboxes="{{ implode(' ', $selected = collect(old($name, $selected ?? $model[$name] ?? []))->map(function($item) { return $item instanceof Illuminate\Database\Eloquent\Model ? $item->getKey() : (string) $item; })->all()) }}">
   @include('blog-admin::forms.label', ['labelTag' => 'legend'])
   @foreach($options as $option_value => $option_display)
-    @if($legend = is_array($option_display) ? $option_value : false)
+    @if($legend = is_iterable($option_display) ? $option_value : false)
     <fieldset><legend>{{ $legend }}</legend>
     @endif
     @foreach($legend ? $option_display : [$option_value => $option_display] as $option_value => $option_display)

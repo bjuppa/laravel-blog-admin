@@ -5,7 +5,7 @@
       @include('blog-admin::forms.partials.inputAttributes', ['errorsId' => $errorsId = $controlId . ($errorsSuffix ?? 'Errors')])
     >
       @foreach($options as $option_value => $option_display)
-        @if($optgroup = is_array($option_display) ? $option_value : false)
+        @if($optgroup = is_iterable($option_display) ? $option_value : false)
         <optgroup label="{{ $optgroup }}">
         @endif
         @foreach($optgroup ? $option_display : [$option_value => $option_display] as $option_value => $option_display)
