@@ -1,4 +1,4 @@
-<div data-selected-options="{{ implode(' ', $selected = collect(old($name, $selected ?? $model[$name] ?? []))->map(function($item) { return $item instanceof Illuminate\Database\Eloquent\Model ? $item->getKey() : strval($item); })->all()) }}">
+<div data-selected-options="{{ implode(' ', $selected = collect(old($name, $selected ?? $model[$name] ?? []))->map(function($item) { return strval($item instanceof Illuminate\Database\Eloquent\Model ? $item->getKey() : $item); })->all()) }}">
   @include('blog-admin::forms.label', ['controlId' => $controlId = $controlId ?? (($idPrefix ?? '') . $name)])
   <div>
     <select multiple
@@ -10,7 +10,7 @@
         @endif
         @foreach($optgroup ? $option_display : [$option_value => $option_display] as $option_value => $option_display)
         <option
-          @if(in_array($option_value, $selected))
+          @if(in_array(strval($option_value), $selected))
             selected
           @endif
           value="{{ $option_value }}"
