@@ -1,6 +1,10 @@
 <fieldset data-checked-radio="{{ $selected = old($name, $selected ?? $model[$name] ?? '') ?? '' }}">
   @include('blog-admin::forms.label', ['labelTag' => 'legend'])
   @foreach($options as $option_value => $option_display)
+    @if($legend = is_array($option_display) ? $option_value : false)
+    <fieldset><legend>{{ $legend }}</legend>
+    @endif
+    @foreach($legend ? $option_display : [$option_value => $option_display] as $option_value => $option_display)
     @component('blog-admin::forms.label', ['label' => $option_display])
       @slot('labelStart')
         <input type="radio"
@@ -12,6 +16,10 @@
         >
       @endslot
     @endcomponent
+    @endforeach
+    @if($legend)
+    </fieldset>
+    @endif
   @endforeach
   @include('blog-admin::forms.partials.errors', ['errorsId' => $errorsId])
 </fieldset>

@@ -1,6 +1,10 @@
 <fieldset data-checked-checkboxes="{{ implode(' ', $selected = collect(old($name, $selected ?? $model[$name] ?? []))->map(function($item) { return $item instanceof Illuminate\Database\Eloquent\Model ? $item->getKey() : (string) $item; })->all()) }}">
   @include('blog-admin::forms.label', ['labelTag' => 'legend'])
   @foreach($options as $option_value => $option_display)
+    @if($legend = is_array($option_display) ? $option_value : false)
+    <fieldset><legend>{{ $legend }}</legend>
+    @endif
+    @foreach($legend ? $option_display : [$option_value => $option_display] as $option_value => $option_display)
     @component('blog-admin::forms.label', ['label' => $option_display])
       @slot('labelStart')
         <input type="checkbox"
@@ -12,6 +16,10 @@
         >
       @endslot
     @endcomponent
+    @endforeach
+    @if($legend)
+    </fieldset>
+    @endif
   @endforeach
   @include('blog-admin::forms.partials.errors', ['errorsId' => $errorsId])
 </fieldset>
