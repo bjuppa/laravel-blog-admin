@@ -4,17 +4,25 @@ namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 
 use Bjuppa\LaravelBlogAdmin\Http\Requests\StoreBlogEntry;
 use Bjuppa\LaravelBlogAdmin\Http\Requests\UpdateBlogEntry;
+use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
+use Kontenta\Kontour\AdminLink;
+use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
+use Kontenta\Kontour\Contracts\CrumbtrailWidget;
 
 //TODO: rename EntryController to BlogEntryController
 class EntryController extends BaseController
 {
+    use RegistersAdminWidgets;
+
     protected $blogRegistry;
 
     public function __construct(BlogRegistry $blogRegistry)
     {
+        $this->crumbtrail = $this->findOrRegisterAdminWidget(CrumbtrailWidget::class, 'kontourToolHeader');
+
         $this->blogRegistry = $blogRegistry;
     }
 
@@ -25,6 +33,8 @@ class EntryController extends BaseController
 
         $entry = new BlogEntry();
         $entry->blog = $blog->getId();
+
+        $this->buildCrumbtrail($blog, 'New entry');
 
         return view('blog-admin::entry.create', compact('entry', 'blog'));
     }
@@ -46,6 +56,8 @@ class EntryController extends BaseController
             return [$blog->getId() => $blog->getTitle()];
         })->all();
 
+        $this->buildCrumbtrail($blog, $entry->getTitle());
+
         return view('blog-admin::entry.edit', compact('entry', 'blog', 'blog_options'));
     }
 
@@ -56,5 +68,11 @@ class EntryController extends BaseController
         $entry->update($request->validated());
 
         return redirect(route('blog-admin.entries.edit', $entry->getKey()));
+    }
+
+    protected function buildCrumbtrail(Blog $blog, $currentPageName)
+    {
+        $this->crumbtrail->addLink(AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId())));
+        $this->crumbtrail->addLink(AdminLink::create($currentPageName, url()->current()));
     }
 }
