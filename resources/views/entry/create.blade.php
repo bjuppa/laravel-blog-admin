@@ -2,11 +2,11 @@
 
 @extends($view_manager->toolLayout())
 
-@section($view_manager->toolHeaderSection())
+@section('kontourToolHeader')
 
 @append
 
-@section($view_manager->toolMainSection())
+@section('kontourToolMain')
 <form action="{{ route('blog-admin.entries.store') }}" method="POST">
 @csrf
 <input type="hidden" name="blog" value="{{ $entry->blog }}">

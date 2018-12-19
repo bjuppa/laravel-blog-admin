@@ -2,7 +2,7 @@
 
 @extends($view_manager->toolLayout())
 
-@section($view_manager->toolMainSection())
+@section('kontourToolMain')
 
 <p>
 @if($entry->isPublic())

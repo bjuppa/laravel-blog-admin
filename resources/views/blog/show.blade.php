@@ -2,11 +2,11 @@
 
 @extends($view_manager->toolLayout())
 
-@section($view_manager->toolHeaderSection())
+@section('kontourToolHeader')
 <h1>{{ $blog->getTitle() }}</h1>
 @append
 
-@section($view_manager->toolMainSection())
+@section('kontourToolMain')
 <a href="{{ route('blog-admin.entries.create', $blog->getId()) }}">{{ __('Create new blog entry in') }} {{ $blog->getTitle() }}</a>
 <table>
 @foreach($entries as $entry)
