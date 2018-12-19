@@ -50,13 +50,14 @@ class EntryController extends BaseController
     {
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
         $blog = $this->blogRegistry->get($entry->getBlogId());
+
+        $this->buildCrumbtrail($blog, $entry->getTitle());
+
         $blog_options = $this->blogRegistry->all()->filter(function ($blog) {
             return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
         })->mapWithKeys(function ($blog) {
             return [$blog->getId() => $blog->getTitle()];
         })->all();
-
-        $this->buildCrumbtrail($blog, $entry->getTitle());
 
         return view('blog-admin::entry.edit', compact('entry', 'blog', 'blog_options'));
     }
