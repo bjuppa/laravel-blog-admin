@@ -11,6 +11,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
 use Kontenta\Kontour\Contracts\CrumbtrailWidget;
+use Kontenta\Kontour\Contracts\MessageWidget;
 
 //TODO: rename EntryController to BlogEntryController
 class EntryController extends BaseController
@@ -21,9 +22,10 @@ class EntryController extends BaseController
 
     public function __construct(BlogRegistry $blogRegistry)
     {
-        $this->crumbtrail = $this->findOrRegisterAdminWidget(CrumbtrailWidget::class, 'kontourToolHeader');
-
         $this->blogRegistry = $blogRegistry;
+
+        $this->crumbtrail = $this->findOrRegisterAdminWidget(CrumbtrailWidget::class, 'kontourToolHeader');
+        $this->messages = $this->findOrRegisterAdminWidget(MessageWidget::class, 'kontourToolHeader');
     }
 
     public function create($blog_id)
@@ -43,7 +45,7 @@ class EntryController extends BaseController
     {
         $entry = BlogEntry::create($request->validated());
 
-        return redirect(route('blog-admin.entries.edit', $entry->getKey()));
+        return redirect(route('blog-admin.entries.edit', $entry->getKey()))->with('status', 'Blog entry created');
     }
 
     public function edit($id)
@@ -52,6 +54,7 @@ class EntryController extends BaseController
         $blog = $this->blogRegistry->get($entry->getBlogId());
 
         $this->buildCrumbtrail($blog, $entry->getTitle());
+        $this->messages->addFromSession();
 
         $blog_options = $this->blogRegistry->all()->filter(function ($blog) {
             return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
@@ -68,7 +71,7 @@ class EntryController extends BaseController
 
         $entry->update($request->validated());
 
-        return redirect(route('blog-admin.entries.edit', $entry->getKey()));
+        return redirect(route('blog-admin.entries.edit', $entry->getKey()))->with('status', 'Save successful');
     }
 
     protected function buildCrumbtrail(Blog $blog, $currentPageName)
