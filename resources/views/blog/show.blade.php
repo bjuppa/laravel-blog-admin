@@ -4,7 +4,8 @@
 
 @section('kontourToolHeader')
 <h1>{{ $blog->getTitle() }}</h1>
-@append
+@parent
+@endsection
 
 @section('kontourToolMain')
 <a href="{{ route('blog-admin.entries.create', $blog->getId()) }}">{{ __('Create new blog entry in') }} {{ $blog->getTitle() }}</a>
