@@ -15,7 +15,7 @@
 <fieldset>
   <legend>Author</legend>
   @include('kontour::forms.input', ['name' => 'author_name'])
-  @include('kontour::forms.input', ['name' => 'author_email'])
+  @include('kontour::forms.input', ['name' => 'author_email', 'type' => 'email'])
   @include('kontour::forms.input', ['name' => 'author_url'])
 </fieldset>
 
