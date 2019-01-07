@@ -4,12 +4,13 @@ namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Illuminate\Routing\Controller as BaseController;
+use Kontenta\Kontour\Concerns\DispatchesAdminToolEvents;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
 use Kontenta\Kontour\Contracts\MessageWidget;
 
 class BlogController extends BaseController
 {
-    use RegistersAdminWidgets;
+    use RegistersAdminWidgets, DispatchesAdminToolEvents;
 
     protected $blogRegistry;
 
@@ -32,6 +33,8 @@ class BlogController extends BaseController
         if (!$entryProvider instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider) {
             $this->messages->addMessage("Blog '" . $blog->getId() . "' is not configured with the Eloquent entry provider", 'error');
         }
+
+        $this->dispatchShowAdminToolVisitedEvent($blog->getTitle());
 
         return view('blog-admin::blog.show', compact('blog', 'entries'));
     }

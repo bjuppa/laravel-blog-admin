@@ -9,6 +9,7 @@ use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
 use Kontenta\Kontour\AdminLink;
+use Kontenta\Kontour\Concerns\DispatchesAdminToolEvents;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
 use Kontenta\Kontour\Contracts\CrumbtrailWidget;
 use Kontenta\Kontour\Contracts\MessageWidget;
@@ -16,7 +17,7 @@ use Kontenta\Kontour\Contracts\MessageWidget;
 //TODO: rename EntryController to BlogEntryController
 class EntryController extends BaseController
 {
-    use RegistersAdminWidgets;
+    use RegistersAdminWidgets, DispatchesAdminToolEvents;
 
     protected $blogRegistry;
 
@@ -37,6 +38,8 @@ class EntryController extends BaseController
         $entry->blog = $blog->getId();
 
         $this->buildCrumbtrail($blog, 'New entry');
+
+        $this->dispatchEditAdminToolVisitedEvent($blog->getTitle() . ': New entry');
 
         return view('blog-admin::entry.create', compact('entry', 'blog'));
     }
@@ -61,6 +64,8 @@ class EntryController extends BaseController
         })->mapWithKeys(function ($blog) {
             return [$blog->getId() => $blog->getTitle()];
         })->all();
+
+        $this->dispatchEditAdminToolVisitedEvent($blog->getTitle() . ': ' . $entry->getTitle());
 
         return view('blog-admin::entry.edit', compact('entry', 'blog', 'blog_options'));
     }
