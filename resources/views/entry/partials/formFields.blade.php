@@ -25,6 +25,6 @@
     @include('kontour::forms.input', ['name' => 'page_title'])
     @include('kontour::forms.input', ['name' => 'description'])
     @include('kontour::forms.textarea', ['name' => 'json_meta_tags'])
-    <pre><samp>{{ $blog->getDefaultMetaTags()->merge($entry)->toHtml() }}</samp></pre>
+    <pre style="white-space: pre-wrap;"><samp>{{ $blog->getDefaultMetaTags()->merge($entry)->toHtml() }}</samp></pre>
   </fieldset>
 @endif
