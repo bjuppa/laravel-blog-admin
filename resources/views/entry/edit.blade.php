@@ -4,7 +4,7 @@
 
 @section('kontourToolMain')
 
-<p>
+<p lang="en">
 @if($entry->isPublic())
   Public since {{ $entry->getPublished() }}
 @elseif($entry->getPublished()->isFuture())
