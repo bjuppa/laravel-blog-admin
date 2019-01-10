@@ -9,7 +9,7 @@ use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
 use Kontenta\Kontour\AdminLink;
-use Kontenta\Kontour\Concerns\DispatchesAdminToolEvents;
+use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
 use Kontenta\Kontour\Contracts\CrumbtrailWidget;
 use Kontenta\Kontour\Contracts\MessageWidget;
@@ -17,7 +17,7 @@ use Kontenta\Kontour\Contracts\MessageWidget;
 //TODO: rename EntryController to BlogEntryController
 class EntryController extends BaseController
 {
-    use RegistersAdminWidgets, DispatchesAdminToolEvents;
+    use RegistersAdminWidgets, AuthorizesAdminRequests;
 
     protected $blogRegistry;
 
@@ -34,12 +34,12 @@ class EntryController extends BaseController
         $blog = $this->blogRegistry->get($blog_id);
         abort_unless($blog, 404, 'Blog "' . e($blog_id) . '" does not exist');
 
+        $this->authorizeEditAdminVisit('manage blog', 'New ' . $blog_id . ' entry', $blog->getTitle() . ': New entry', $blog_id);
+
         $entry = new BlogEntry();
         $entry->blog = $blog->getId();
 
         $this->buildCrumbtrail($blog, 'New entry');
-
-        $this->dispatchEditAdminToolVisitedEvent($blog->getTitle() . ': New entry');
 
         return view('blog-admin::entry.create', compact('entry', 'blog'));
     }
@@ -56,6 +56,8 @@ class EntryController extends BaseController
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
         $blog = $this->blogRegistry->get($entry->getBlogId());
 
+        $this->authorizeEditAdminVisit('edit', 'Blog ' . $entry->getBlogId() . ': '. $entry->getId(), $blog->getTitle() . ': ' . $entry->getTitle(), $entry);
+
         $this->buildCrumbtrail($blog, $entry->getTitle());
         $this->messages->addFromSession();
 
@@ -64,8 +66,6 @@ class EntryController extends BaseController
         })->mapWithKeys(function ($blog) {
             return [$blog->getId() => $blog->getTitle()];
         })->all();
-
-        $this->dispatchEditAdminToolVisitedEvent($blog->getTitle() . ': ' . $entry->getTitle());
 
         return view('blog-admin::entry.edit', compact('entry', 'blog', 'blog_options'));
     }
