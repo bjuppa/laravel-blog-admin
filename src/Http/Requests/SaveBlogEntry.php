@@ -2,21 +2,11 @@
 
 namespace Bjuppa\LaravelBlogAdmin\Http\Requests;
 
+use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class SaveBlogEntry extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
-    public function authorize()
-    {
-        // TODO: authorize user against blog
-        return true;
-    }
-
     /**
      * Get the validation rules that apply to the request.
      *
