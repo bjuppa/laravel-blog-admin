@@ -49,12 +49,17 @@ class EntryController extends BaseController
     {
         $entry = BlogEntry::create($request->validated());
 
-        return redirect(route('blog-admin.entries.edit', $entry->getKey()))->with('status', 'Blog entry created');
+        return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]))
+            ->with('status', 'Blog entry created');
     }
 
-    public function edit($id)
+    public function edit($blogId, $id)
     {
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
+        if ($entry->getBlogId() != $blogId) {
+            return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
+        }
+
         $blog = $this->blogRegistry->get($entry->getBlogId());
 
         $this->authorizeEditAdminVisit('edit', 'Blog ' . $entry->getBlogId() . ': ' . $entry->getId(), $blog->getTitle() . ': ' . $entry->getTitle(), $entry);
@@ -81,7 +86,8 @@ class EntryController extends BaseController
 
         $entry->update($request->validated());
 
-        return redirect(route('blog-admin.entries.edit', $entry->getKey()))->with('status', 'Save successful');
+        return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]))
+            ->with('status', 'Save successful');
     }
 
     protected function buildCrumbtrail(Blog $blog, $currentPageName)

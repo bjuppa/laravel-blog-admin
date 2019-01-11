@@ -42,7 +42,7 @@ class BlogAdminTest extends IntegrationTest
         $response->assertStatus(200);
         $response->assertSee('>Main Blog</h1>');
         $response->assertSee('>' . $entry->getTitle() . '</a>');
-        $response->assertSee('href="'.route('blog-admin.entries.create', 'main').'"');
+        $response->assertSee('href="' . route('blog-admin.entries.create', 'main') . '"');
     }
 
     public function test_create_entry_page()
@@ -58,17 +58,19 @@ class BlogAdminTest extends IntegrationTest
         $formData = [
             'blog' => 'main',
             'title' => 'A new blog post',
-            'content' => 'It’s so pointless we just call it content.'
+            'content' => 'It’s so pointless we just call it content.',
         ];
         $response = $this->actingAs($this->user)->post(route('blog-admin.entries.store'), $formData);
 
-        $response->assertRedirect(route('blog-admin.entries.edit', 1));
+        $response->assertRedirect(route('blog-admin.entries.edit', ['main', 1]));
     }
 
     public function test_edit_entry_page()
     {
         $entry = factory(BlogEntry::class)->create();
-        $response = $this->actingAs($this->user)->get(route('blog-admin.entries.edit', $entry->getKey()));
+        $entry->refresh();
+
+        $response = $this->actingAs($this->user)->get(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
 
         $response->assertStatus(200);
         $response->assertSee('value="PUT"');
@@ -77,12 +79,14 @@ class BlogAdminTest extends IntegrationTest
     public function test_entry_can_be_updated()
     {
         $entry = factory(BlogEntry::class)->create();
+        $entry->refresh();
+
         $formData = [
-            'title' => 'Replaced title'
+            'title' => 'Replaced title',
         ];
         $response = $this->actingAs($this->user)->put(route('blog-admin.entries.update', $entry->getKey()), $formData);
 
-        $response->assertRedirect(route('blog-admin.entries.edit', $entry->getKey()));
+        $response->assertRedirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
         $entry->refresh();
         $this->assertEquals('Replaced title', $entry->title);
     }

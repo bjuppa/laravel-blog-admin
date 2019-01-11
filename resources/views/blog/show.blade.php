@@ -12,7 +12,7 @@
 <table>
 @foreach($entries as $entry)
 <tr>
-  <td><a href="{{ route('blog-admin.entries.edit', $entry->getId()) }}">{{ $entry->getTitle() }}</a></td>
+  <td><a href="{{ route('blog-admin.entries.edit', [$blog->getId(), $entry->getId()]) }}">{{ $entry->getTitle() }}</a></td>
 </tr>
 @endforeach
 </table>
