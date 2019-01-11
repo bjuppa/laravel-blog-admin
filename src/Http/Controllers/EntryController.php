@@ -12,6 +12,7 @@ use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
 use Kontenta\Kontour\Contracts\CrumbtrailWidget;
+use Kontenta\Kontour\Contracts\ItemHistoryWidget;
 use Kontenta\Kontour\Contracts\MessageWidget;
 
 //TODO: rename EntryController to BlogEntryController
@@ -56,10 +57,14 @@ class EntryController extends BaseController
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
         $blog = $this->blogRegistry->get($entry->getBlogId());
 
-        $this->authorizeEditAdminVisit('edit', 'Blog ' . $entry->getBlogId() . ': '. $entry->getId(), $blog->getTitle() . ': ' . $entry->getTitle(), $entry);
+        $this->authorizeEditAdminVisit('edit', 'Blog ' . $entry->getBlogId() . ': ' . $entry->getId(), $blog->getTitle() . ': ' . $entry->getTitle(), $entry);
 
         $this->buildCrumbtrail($blog, $entry->getTitle());
         $this->messages->addFromSession();
+
+        $itemHistoryWidget = $this->findOrRegisterAdminWidget(ItemHistoryWidget::class, 'kontourToolWidgets');
+        $itemHistoryWidget->addCreatedEntry($entry->getAttribute($entry->getCreatedAtColumn()));
+        $itemHistoryWidget->addUpdatedEntry($entry->getAttribute($entry->getUpdatedAtColumn()));
 
         $blog_options = $this->blogRegistry->all()->filter(function ($blog) {
             return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
