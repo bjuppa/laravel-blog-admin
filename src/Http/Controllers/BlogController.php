@@ -25,15 +25,22 @@ class BlogController extends BaseController
     {
         abort_unless($this->blogRegistry->has($id), 404);
         $blog = $this->blogRegistry->get($id);
-        $this->authorizeShowAdminVisit('manage blog', 'Blog ' . $id, $blog->getTitle(), $id);
 
         $entryProvider = $blog->getEntryProvider();
+        abort_unless(
+            $entryProvider instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
+            500,
+            "Blog '" . $blog->getId() . "' is not configured with the Eloquent entry provider"
+        );
+
+        $this->authorizeShowAdminVisit(
+            $blog->getMainAbility(),
+            'Blog ' . $blog->getId(),
+            $blog->getTitle(),
+            $blog->getId()
+        );
 
         $entries = $entryProvider->getBuilder()->withUnpublished()->get();
-
-        if (!$entryProvider instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider) {
-            $this->messages->addMessage("Blog '" . $blog->getId() . "' is not configured with the Eloquent entry provider", 'error');
-        }
 
         return view('blog-admin::blog.show', compact('blog', 'entries'));
     }

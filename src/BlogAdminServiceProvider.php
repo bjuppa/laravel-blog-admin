@@ -45,7 +45,7 @@ class BlogAdminServiceProvider extends ServiceProvider
             })->each(function (Blog $blog) use ($menuWidget) {
                 $menuWidget->addLink(
                     AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId()))
-                    ->registerAbilityForAuthorization('manage blog', $blog->getId()),
+                        ->registerAbilityForAuthorization($blog->getMainAbility(), $blog->getId()),
                     'Blogs'
                 );
             });

@@ -11,8 +11,9 @@ class StoreBlogEntry extends SaveBlogEntry
      */
     public function authorize()
     {
-        $blogId = $this->input('blog');
-        return $this->user()->can('manage blog', $blogId);
+        $blog = $this->blogRegistry->get($this->input('blog'));
+
+        return $this->user()->can($blog->getCreateAbility(), $blog->getId());
     }
 
     /**

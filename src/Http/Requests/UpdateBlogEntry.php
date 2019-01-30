@@ -14,6 +14,8 @@ class UpdateBlogEntry extends SaveBlogEntry
     public function authorize()
     {
         $entry = BlogEntry::withUnpublished()->find($this->route('id'));
-        return $this->user()->can('edit', $entry);
+        $blog = $this->blogRegistry->get($entry->getBlogId());
+
+        return $this->user()->can($blog->getEditAbility(), $entry);
     }
 }

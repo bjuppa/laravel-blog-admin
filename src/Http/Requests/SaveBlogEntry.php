@@ -2,11 +2,16 @@
 
 namespace Bjuppa\LaravelBlogAdmin\Http\Requests;
 
-use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
+use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Illuminate\Foundation\Http\FormRequest;
 
 abstract class SaveBlogEntry extends FormRequest
 {
+    public function __construct(BlogRegistry $blogRegistry)
+    {
+        $this->blogRegistry = $blogRegistry;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *

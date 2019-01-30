@@ -35,10 +35,14 @@ class EntryController extends BaseController
         $blog = $this->blogRegistry->get($blog_id);
         abort_unless($blog, 404, 'Blog "' . e($blog_id) . '" does not exist');
 
-        $this->authorizeEditAdminVisit('manage blog', 'New ' . $blog_id . ' entry', $blog->getTitle() . ': New entry', $blog_id);
+        $entry = $blog->getEntryProvider()->getBlogEntryModel();
 
-        $entry = new BlogEntry();
-        $entry->blog = $blog->getId();
+        $this->authorizeEditAdminVisit(
+            $blog->getCreateAbility(),
+            'New ' . $blog->getId() . ' entry',
+            $blog->getTitle() . ': New entry',
+            $blog->getId()
+        );
 
         $this->buildCrumbtrail($blog, 'New entry');
 
@@ -62,7 +66,12 @@ class EntryController extends BaseController
 
         $blog = $this->blogRegistry->get($entry->getBlogId());
 
-        $this->authorizeEditAdminVisit('edit', 'Blog ' . $entry->getBlogId() . ': ' . $entry->getId(), $blog->getTitle() . ': ' . $entry->getTitle(), $entry);
+        $this->authorizeEditAdminVisit(
+            $blog->getEditAbility(),
+            'Blog ' . $entry->getBlogId() . ': ' . $entry->getId(),
+            $blog->getTitle() . ': ' . $entry->getTitle(),
+            $entry
+        );
 
         $this->buildCrumbtrail($blog, $entry->getTitle());
         $this->messages->addFromSession();
