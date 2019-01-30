@@ -8,6 +8,7 @@ use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
@@ -81,7 +82,8 @@ class EntryController extends BaseController
         $itemHistoryWidget->addUpdatedEntry($entry->getAttribute($entry->getUpdatedAtColumn()));
 
         $blog_options = $this->blogRegistry->all()->filter(function ($blog) {
-            return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
+            return Auth::user()->can($blog->getCreateAbility(), $blog->getId())
+            and $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
         })->mapWithKeys(function ($blog) {
             return [$blog->getId() => $blog->getTitle()];
         })->all();

@@ -1,7 +1,9 @@
 @include('kontour::forms.input', ['name' => 'title', 'controlAttributes' => ['required']])
 
 @if($entry->exists)
-  @include('kontour::forms.select', ['name' => 'blog', 'options' => $blog_options])
+  @if(count($blog_options) > 1)
+    @include('kontour::forms.select', ['name' => 'blog', 'options' => $blog_options])
+  @endif
   @include('kontour::forms.input', ['name' => 'slug'])
   @include('kontour::forms.input', ['name' => 'publish_after', 'type' => 'datetime-local'])
 @endif
