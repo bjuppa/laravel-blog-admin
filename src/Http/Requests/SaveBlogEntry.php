@@ -2,11 +2,17 @@
 
 namespace Bjuppa\LaravelBlogAdmin\Http\Requests;
 
-use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
+use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 abstract class SaveBlogEntry extends FormRequest
 {
+    public function __construct(BlogRegistry $blogRegistry)
+    {
+        $this->blogRegistry = $blogRegistry;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -15,7 +21,7 @@ abstract class SaveBlogEntry extends FormRequest
     public function rules()
     {
         return [
-            'blog' => ['filled', 'string'],
+            'blog' => ['filled', Rule::in($this->getValidBlogsForCurrentUser()->map->getId())],
             'publish_after' => ['nullable', 'date'],
             'slug' => ['filled', 'alpha_dash', 'max:255'],
             'title' => ['filled', 'string', 'max:255'],
@@ -30,5 +36,13 @@ abstract class SaveBlogEntry extends FormRequest
             'json_meta_tags' => ['nullable', 'json'],
             'display_full_content_in_feed' => ['nullable', 'boolean'],
         ];
+    }
+
+    public function getValidBlogsForCurrentUser()
+    {
+        return $this->blogRegistry->all()->filter(function ($blog) {
+            return $this->user()->can($blog->getCreateAbility(), $blog->getId())
+            and $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
+        });
     }
 }

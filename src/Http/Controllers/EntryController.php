@@ -8,6 +8,7 @@ use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
@@ -35,10 +36,14 @@ class EntryController extends BaseController
         $blog = $this->blogRegistry->get($blog_id);
         abort_unless($blog, 404, 'Blog "' . e($blog_id) . '" does not exist');
 
-        $this->authorizeEditAdminVisit('manage blog', 'New ' . $blog_id . ' entry', $blog->getTitle() . ': New entry', $blog_id);
+        $entry = $blog->getEntryProvider()->getBlogEntryModel();
 
-        $entry = new BlogEntry();
-        $entry->blog = $blog->getId();
+        $this->authorizeEditAdminVisit(
+            $blog->getCreateAbility(),
+            'New ' . $blog->getId() . ' entry',
+            $blog->getTitle() . ': New entry',
+            $blog->getId()
+        );
 
         $this->buildCrumbtrail($blog, 'New entry');
 
@@ -62,7 +67,12 @@ class EntryController extends BaseController
 
         $blog = $this->blogRegistry->get($entry->getBlogId());
 
-        $this->authorizeEditAdminVisit('edit', 'Blog ' . $entry->getBlogId() . ': ' . $entry->getId(), $blog->getTitle() . ': ' . $entry->getTitle(), $entry);
+        $this->authorizeEditAdminVisit(
+            $blog->getEditAbility(),
+            'Blog ' . $entry->getBlogId() . ': ' . $entry->getId(),
+            $blog->getTitle() . ': ' . $entry->getTitle(),
+            $entry
+        );
 
         $this->buildCrumbtrail($blog, $entry->getTitle());
         $this->messages->addFromSession();
@@ -72,7 +82,8 @@ class EntryController extends BaseController
         $itemHistoryWidget->addUpdatedEntry($entry->getAttribute($entry->getUpdatedAtColumn()));
 
         $blog_options = $this->blogRegistry->all()->filter(function ($blog) {
-            return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
+            return Auth::user()->can($blog->getCreateAbility(), $blog->getId())
+            and $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
         })->mapWithKeys(function ($blog) {
             return [$blog->getId() => $blog->getTitle()];
         })->all();

@@ -2,11 +2,8 @@
 
 namespace Bjuppa\LaravelBlogAdmin;
 
-use Bjuppa\LaravelBlogAdmin\Policies\BlogEntryPolicy;
 use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
-use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\RegistersAdminRoutes;
@@ -34,18 +31,13 @@ class BlogAdminServiceProvider extends ServiceProvider
         $this->registerAdminRoutes(__DIR__ . '/../routes/blog-admin.php');
         $this->registerResources();
 
-        Gate::define('manage blog', function ($user, string $blogId) {
-            return true;
-        });
-        Gate::policy(BlogEntry::class, BlogEntryPolicy::class);
-
         $adminBootManager->beforeRoute(function (BlogRegistry $blogRegistry, MenuWidget $menuWidget) {
             $blogRegistry->all()->filter(function ($blog) {
                 return $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
             })->each(function (Blog $blog) use ($menuWidget) {
                 $menuWidget->addLink(
                     AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId()))
-                    ->registerAbilityForAuthorization('manage blog', $blog->getId()),
+                        ->registerAbilityForAuthorization($blog->getMainAbility(), $blog->getId()),
                     'Blogs'
                 );
             });
