@@ -14,9 +14,14 @@
 <table>
 @foreach($entries as $entry)
 <tr>
-  @can($blog->getEditAbility(), $entry)
-    <td><a href="{{ route('blog-admin.entries.edit', [$blog->getId(), $entry->getId()]) }}">{{ $entry->getTitle() }}</a></td>
-  @endcan
+  <td><a
+    @can($blog->getEditAbility(), $entry)
+      href="{{ route('blog-admin.entries.edit', [$blog->getId(), $entry->getId()]) }}"
+    @elseif($entry->isPublic())
+      href="{{ $blog->urlToEntry($entry) }}"
+      target="_blank"
+    @endif
+  >{{ $entry->getTitle() }}</a></td>
 </tr>
 @endforeach
 </table>
