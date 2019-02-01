@@ -4,6 +4,20 @@
 
 @section('kontourToolHeader')
   <h1>{{ $blog->getTitle() }}</h1>
+  <dl lang="en" style="display: grid; grid-auto-flow: column; grid-gap: 1rem;">
+    <div>
+      <dt>Index</dt>
+      <dd><a href="{{ $blog->urlToIndex() }}" target="{{ $blog->getId() }}_blog">{{ $blog->urlToIndex() }}</a></dd>
+    </div>
+    <div>
+      <dt>Feed</dt>
+      <dd><a href="{{ $blog->urlToFeed() }}" target="{{ $blog->getId() }}_feed">{{ $blog->urlToFeed() }}</a></dd>
+    </div>
+    <div>
+      <dt>Updated</dt>
+      <dd><time datetime="{{ $blog->getUpdated()->toAtomString() }}">{{ $blog->getUpdated()->diffForHumans() }}</time></dd>
+    </div>
+  </dl>
   @parent
   @can($blog->getCreateAbility(), $blog->getId())
     <a href="{{ route('blog-admin.entries.create', $blog->getId()) }}">{{ __('Create new blog entry in') }} {{ $blog->getTitle() }}</a>
