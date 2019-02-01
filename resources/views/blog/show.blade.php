@@ -25,18 +25,19 @@
 @endsection
 
 @section('kontourToolMain')
-<table>
-@foreach($entries as $entry)
-<tr>
-  <td><a
-    @can($blog->getEditAbility(), $entry)
-      href="{{ route('blog-admin.entries.edit', [$blog->getId(), $entry->getId()]) }}"
-    @elseif($entry->isPublic())
-      href="{{ $blog->urlToEntry($entry) }}"
-      target="_blank"
-    @endif
-  >{{ $entry->getTitle() }}</a></td>
-</tr>
-@endforeach
-</table>
+  <table>
+  @foreach($entries as $entry)
+    <tr>
+      <td><a
+        @can($blog->getEditAbility(), $entry)
+          href="{{ route('blog-admin.entries.edit', [$blog->getId(), $entry->getId()]) }}"
+        @elseif($entry->isPublic())
+          href="{{ $blog->urlToEntry($entry) }}"
+          target="_blank"
+        @endif
+      >{{ $entry->getTitle() }}</a></td>
+      <td>@include('blog-admin::entry.partials.publishStatusString')</td>
+    </tr>
+    @endforeach
+  </table>
 @append

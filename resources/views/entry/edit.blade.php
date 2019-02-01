@@ -5,13 +5,7 @@
 @section('kontourToolMain')
 
   <p lang="en">
-    @if($entry->isPublic())
-      Public since {{ $entry->getPublished() }}
-    @elseif($entry->getPublished()->isFuture())
-      Scheduled for publishing {{ $entry->getPublished() }}
-    @else
-      Not scheduled for publishing
-    @endif
+    @include('blog-admin::entry.partials.publishStatusString')
     at
     <a
       @if($entry->isPublic() or Auth::user()->can($blog->getPreviewAbility(), $entry))
