@@ -36,7 +36,7 @@
           target="_blank"
         @endif
       >{{ $entry->getTitle() }}</a></td>
-      <td>@include('blog-admin::entry.partials.publishStatusString')</td>
+      <td lang="en">@include('blog-admin::entry.partials.publishStatusString')</td>
     </tr>
     @endforeach
   </table>
