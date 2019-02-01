@@ -7,7 +7,7 @@
   <dl lang="en" style="display: grid; grid-auto-flow: column; grid-gap: 1rem;">
     <div>
       <dt>Index</dt>
-      <dd><a href="{{ $blog->urlToIndex() }}" target="{{ $blog->getId() }}_blog">{{ $blog->urlToIndex() }}</a></dd>
+      <dd><a href="{{ $blog->urlToIndex() }}" target="{{ $blog->getId() }}">{{ $blog->urlToIndex() }}</a></dd>
     </div>
     <div>
       <dt>Feed</dt>
@@ -34,7 +34,7 @@
           href="{{ route('blog-admin.entries.edit', [$blog->getId(), $entry->getId()]) }}"
         @elseif($entry->isPublic())
           href="{{ $blog->urlToEntry($entry) }}"
-          target="_blank"
+          target="{{ $blog->getId() }}"
         @endif
       >{{ $entry->getTitle() }}</a></td>
       <td lang="en">@include('blog-admin::entry.partials.publishStatusString')</td>

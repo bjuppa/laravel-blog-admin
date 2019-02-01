@@ -11,7 +11,7 @@
       @if($entry->isPublic() or Auth::user()->can($blog->getPreviewAbility(), $entry))
         href="{{ $blog->urlToEntry($entry) }}"
       @endif
-      target="_blank"
+      target="{{ $blog->getId() }}"
     >{{ $blog->urlToEntry($entry) }}</a>
   </p>
 
