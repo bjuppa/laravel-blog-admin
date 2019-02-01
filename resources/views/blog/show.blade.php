@@ -18,6 +18,10 @@
       <dt>Updated</dt>
       <dd><time datetime="{{ $blog->convertToBlogTimezone($blog->getUpdated())->toAtomString() }}">{{ $blog->getUpdated()->diffForHumans() }}</time></dd>
     </div>
+    <div>
+      <dt>Timezone</dt>
+      <dd>{{ $blog->getTimezone()->getName() }}</dd>
+    </div>
   </dl>
   @parent
   @can($blog->getCreateAbility(), $blog->getId())
