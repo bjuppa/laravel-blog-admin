@@ -4,7 +4,7 @@
 
 @section('kontourToolHeader')
   <h1>{{ $blog->getTitle() }}</h1>
-  <dl lang="en" style="display: grid; grid-auto-flow: column; grid-gap: 1rem;">
+  <dl lang="en" style="display: grid; grid-gap: 1rem; grid-template-columns: repeat(auto-fit, minmax({{ strlen($blog->urlToFeed()) }}ch, 1fr));">
     <div>
       <dt>Index</dt>
       <dd><a href="{{ $blog->urlToIndex() }}" target="{{ $blog->getId() }}">{{ $blog->urlToIndex() }}</a></dd>
