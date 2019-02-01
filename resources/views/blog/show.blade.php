@@ -16,7 +16,7 @@
     </div>
     <div>
       <dt>Updated</dt>
-      <dd><time datetime="{{ $blog->getUpdated()->toAtomString() }}">{{ $blog->getUpdated()->diffForHumans() }}</time></dd>
+      <dd><time datetime="{{ $blog->convertToBlogTimezone($blog->getUpdated())->toAtomString() }}">{{ $blog->getUpdated()->diffForHumans() }}</time></dd>
     </div>
   </dl>
   @parent
