@@ -9,7 +9,11 @@
 @endif
 
 @include('kontour::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
-@include('kontour::forms.radiobuttons', ['name' => 'display_full_content_in_feed', 'options' => ['' => 'Blog default', 1 => 'Display full content', 0 => 'Display summary or teaser with a link to read more']])
+@include('kontour::forms.radiobuttons', ['name' => 'display_full_content_in_feed', 'options' => [
+  '' => 'Blog default ('. ($blog->displayFullEntryInFeed() ? 'full content' : 'summary or teaser') .')',
+  1 => 'Display full content',
+  0 => 'Display summary or teaser with a link to read more'
+]])
 @include('kontour::forms.textarea', ['name' => 'summary'])
 @include('kontour::forms.textarea', ['name' => 'image'])
 <samp>{{ $entry->getImage() }}</samp>

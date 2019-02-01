@@ -12,6 +12,7 @@
     <div>
       <dt>Feed</dt>
       <dd><a href="{{ $blog->urlToFeed() }}" target="{{ $blog->getId() }}_feed">{{ $blog->urlToFeed() }}</a></dd>
+      <dd>{{ $blog->displayFullEntryInFeed() ? 'Full content' : 'Summary or teaser' }} by default</dd>
     </div>
     <div>
       <dt>Updated</dt>
