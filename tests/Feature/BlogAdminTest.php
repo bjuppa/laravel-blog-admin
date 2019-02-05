@@ -83,6 +83,7 @@ class BlogAdminTest extends IntegrationTest
 
         $formData = [
             'title' => 'Replaced title',
+            'blog' => $entry->blog,
         ];
         $response = $this->actingAs($this->user)->put(route('blog-admin.entries.update', $entry->getKey()), $formData);
 

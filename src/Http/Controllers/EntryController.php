@@ -52,7 +52,7 @@ class EntryController extends BaseController
 
     public function store(StoreBlogEntry $request)
     {
-        $entry = BlogEntry::create($request->validated());
+        $entry = BlogEntry::create($request->validatedForModel());
 
         return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]))
             ->with('status', 'Blog entry created');
@@ -95,7 +95,7 @@ class EntryController extends BaseController
     {
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
 
-        $entry->update($request->validated());
+        $entry->update($request->validatedForModel());
 
         return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]))
             ->with('status', 'Save successful');
