@@ -101,6 +101,20 @@ class EntryController extends BaseController
             ->with('status', 'Save successful');
     }
 
+    public function destroy($id)
+    {
+        $entry = BlogEntry::withUnpublished()->findOrFail($id);
+        $blog = $this->blogRegistry->get($entry->getBlogId());
+
+        if ($blog->getEditAbility()) {
+            $this->authorize($blog->getEditAbility(), $entry);
+        }
+
+        $entry->delete();
+
+        return redirect(route('blog-admin.blogs.show', $entry->getBlogId()))->with('status', 'Deleted entry ' . $entry->getTitle());
+    }
+
     protected function buildCrumbtrail(Blog $blog, $currentPageName)
     {
         $this->crumbtrail->addLink(AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId())));

@@ -8,4 +8,5 @@ Route::namespace('Bjuppa\LaravelBlogAdmin\Http\Controllers')->name('blog-admin.'
     Route::post('/blog-entries', 'EntryController@store')->name('entries.store');
     Route::get('/blogs/{blog}/entries/{id}/edit', 'EntryController@edit')->name('entries.edit');
     Route::put('/blog-entries/{id}', 'EntryController@update')->name('entries.update');
+    Route::delete('/blog-entries/{id}', 'EntryController@destroy')->name('entries.destroy');
 });

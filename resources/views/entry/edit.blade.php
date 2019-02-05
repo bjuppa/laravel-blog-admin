@@ -2,8 +2,8 @@
 
 @extends($view_manager->toolLayout())
 
-@section('kontourToolMain')
-
+@section('kontourToolHeader')
+  @parent
   <p lang="en">
     <small>
     @include('blog-admin::entry.partials.publishStatusString')
@@ -16,12 +16,24 @@
     >{{ $blog->urlToEntry($entry) }}</a>
     </small>
   </p>
+@endsection
 
+@section('kontourToolMain')
   <form action="{{ route('blog-admin.entries.update', $entry->getKey()) }}" method="POST">
     @method('PUT')
     @csrf
     @include('blog-admin::entry.partials.formFields', ['model' => $entry])
     <button type="submit">{{ __('Save changes to blog entry') }}</button>
   </form>
+@endsection
 
-@append
+@section('kontourToolFooter')
+  @unless($entry->isPublic())
+    <form action="{{ route('blog-admin.entries.destroy', $entry->getKey()) }}" method="POST">
+      @method('DELETE')
+      @csrf
+      <button type="submit" aria-label="{{ __('Delete blog entry') }} {{ $entry->getTitle() }}">{{ __('Delete blog entry') }}</button>
+    </form>
+  @endunless
+  @parent
+@endsection
