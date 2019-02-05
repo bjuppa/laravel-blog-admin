@@ -41,7 +41,7 @@
           target="{{ $blog->getId() }}"
         @endif
       >{{ $entry->getTitle() }}</a></td>
-      <td lang="en">@include('blog-admin::entry.partials.publishStatusString')</td>
+      <td lang="en"><small>@include('blog-admin::entry.partials.publishStatusString')</small></td>
     </tr>
     @endforeach
   </table>

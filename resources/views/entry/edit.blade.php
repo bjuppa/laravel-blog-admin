@@ -5,6 +5,7 @@
 @section('kontourToolMain')
 
   <p lang="en">
+    <small>
     @include('blog-admin::entry.partials.publishStatusString')
     at
     <a
@@ -13,6 +14,7 @@
       @endif
       target="{{ $blog->getId() }}"
     >{{ $blog->urlToEntry($entry) }}</a>
+    </small>
   </p>
 
   <form action="{{ route('blog-admin.entries.update', $entry->getKey()) }}" method="POST">
