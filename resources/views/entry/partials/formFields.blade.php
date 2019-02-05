@@ -6,7 +6,12 @@
     @include('kontour::forms.select', ['name' => 'blog', 'options' => $blog_options])
   @endif
   @include('kontour::forms.input', ['name' => 'slug'])
-  @include('kontour::forms.input', ['name' => 'publish_after', 'type' => 'datetime-local'])
+  @include('kontour::forms.input', [
+    'name' => 'publish_after',
+    'afterControl' => $blog->getTimezone()->getName(),
+    'value' => $blog->convertToBlogTimezone($model['publish_after']),
+    'type' => 'datetime-local',
+  ])
 @endif
 
 @include('kontour::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
