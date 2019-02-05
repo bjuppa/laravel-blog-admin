@@ -9,7 +9,7 @@
   @include('kontour::forms.input', [
     'name' => 'publish_after',
     'afterControl' => $blog->getTimezone()->getName(),
-    'value' => $model['publish_after'] ? $blog->convertToBlogTimezone($model['publish_after'])->format('Y-m-d\TH:i:s') : '',
+    'value' => $model['publish_after'] ? $blog->convertToBlogTimezone($model['publish_after'])->format('Y-m-d\TH:i') : '',
     'type' => 'datetime-local',
   ])
 @endif
