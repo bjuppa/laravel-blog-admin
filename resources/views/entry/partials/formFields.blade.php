@@ -14,14 +14,33 @@
   ])
 @endif
 
-@include('kontour::forms.textarea', ['name' => 'content', 'controlAttributes' => ['required']])
+@include('kontour::forms.textarea', [
+  'name' => 'content',
+  'controlAttributes' => [
+    'required',
+    'rows' => ceil(max(strlen($model->content) / 65 + substr_count($model->content, "\n"), 20)),
+    'style' => 'max-height: 80vh;',
+  ],
+])
 @include('kontour::forms.radiobuttons', ['name' => 'display_full_content_in_feed', 'options' => [
   '' => 'Blog default ('. ($blog->displayFullEntryInFeed() ? 'full content' : 'summary or teaser') .')',
   1 => 'Display full content',
   0 => 'Display summary or teaser with a link to read more'
 ]])
-@include('kontour::forms.textarea', ['name' => 'summary'])
-@include('kontour::forms.textarea', ['name' => 'image'])
+@include('kontour::forms.textarea', [
+  'name' => 'summary',
+  'controlAttributes' => [
+    'rows' => ceil(max(strlen($model->summary) / 65 + substr_count($model->summary, "\n"), 3)),
+    'style' => 'max-height: 80vh;',
+  ],
+])
+@include('kontour::forms.textarea', [
+  'name' => 'image',
+  'controlAttributes' => [
+    'rows' => ceil(max(strlen($model->image) / 65 + substr_count($model->image, "\n"), 3)),
+    'style' => 'max-height: 80vh;',
+  ],
+])
 <samp>{{ $entry->getImage() }}</samp>
 
 <fieldset>
@@ -36,7 +55,13 @@
     <legend>Meta-data</legend>
     @include('kontour::forms.input', ['name' => 'page_title'])
     @include('kontour::forms.input', ['name' => 'description'])
-    @include('kontour::forms.textarea', ['name' => 'json_meta_tags'])
+    @include('kontour::forms.textarea', [
+      'name' => 'json_meta_tags',
+      'controlAttributes' => [
+        'rows' => 1 + substr_count($model->json_meta_tags, "\n"),
+        'style' => 'max-height: 80vh;',
+      ],
+    ])
     <pre style="white-space: pre-wrap; word-break: break-all;"><samp>{{ $blog->getDefaultMetaTags()->merge($entry)->toHtml() }}</samp></pre>
   </fieldset>
 @endif
