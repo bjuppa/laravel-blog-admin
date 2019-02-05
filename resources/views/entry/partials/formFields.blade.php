@@ -54,7 +54,13 @@
   <fieldset>
     <legend>Meta-data</legend>
     @include('kontour::forms.input', ['name' => 'page_title'])
-    @include('kontour::forms.input', ['name' => 'description'])
+    @include('kontour::forms.textarea', [
+      'name' => 'description',
+      'controlAttributes' => [
+        'rows' => ceil(max(strlen($model->description) / 65, 2)),
+        'style' => 'max-height: 20vh;',
+      ],
+    ])
     @include('kontour::forms.textarea', [
       'name' => 'json_meta_tags',
       'value' => $model->json_meta_tags == 'null' ? "[{\n\"\": \"\"\n}]" : $model->json_meta_tags,
