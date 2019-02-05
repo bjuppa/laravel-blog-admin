@@ -57,8 +57,9 @@
     @include('kontour::forms.input', ['name' => 'description'])
     @include('kontour::forms.textarea', [
       'name' => 'json_meta_tags',
+      'value' => $model->json_meta_tags == 'null' ? "[{\n\"\": \"\"\n}]" : $model->json_meta_tags,
       'controlAttributes' => [
-        'rows' => 1 + substr_count($model->json_meta_tags, "\n"),
+        'rows' => ceil(max(substr_count($model->json_meta_tags, "\n") + 1, 3)),
         'style' => 'max-height: 80vh;',
       ],
     ])
