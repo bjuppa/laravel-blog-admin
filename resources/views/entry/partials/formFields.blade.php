@@ -1,3 +1,4 @@
+<input type="hidden" name="blog" value="{{ $entry->blog }}">
 @include('kontour::forms.input', ['name' => 'title', 'controlAttributes' => ['required']])
 
 @if($entry->exists)
