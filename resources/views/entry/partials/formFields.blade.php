@@ -30,7 +30,7 @@
 @include('kontour::forms.textarea', [
   'name' => 'summary',
   'controlAttributes' => [
-    'rows' => ceil(max(strlen($model->summary) / 65 + substr_count($model->summary, "\n"), 3)),
+    'rows' => ceil(max(strlen($model->summary) / 65 + substr_count($model->summary, "\n"), 7)),
     'style' => 'max-height: 80vh;',
   ],
 ])
