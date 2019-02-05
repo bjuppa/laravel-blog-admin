@@ -40,7 +40,7 @@ class BlogController extends BaseController
             $blog->getId()
         );
 
-        $entries = $entryProvider->getBuilder()->withUnpublished()->get();
+        $entries = $entryProvider->getBuilder()->withUnpublished()->latestPublication()->get();
 
         return view('blog-admin::blog.show', compact('blog', 'entries'));
     }
