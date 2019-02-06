@@ -35,8 +35,8 @@ class BlogController extends BaseController
 
         $this->authorizeShowAdminVisit(
             $blog->getMainAbility(),
-            'Blog ' . $blog->getId(),
             $blog->getTitle(),
+            'Blog: ' . $blog->getTitle(),
             $blog->getId()
         );
 

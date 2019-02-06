@@ -40,7 +40,7 @@ class EntryController extends BaseController
 
         $this->authorizeEditAdminVisit(
             $blog->getCreateAbility(),
-            'New ' . $blog->getId() . ' entry',
+            'New ' . $blog->getTitle() . ' entry',
             $blog->getTitle() . ': New entry',
             $blog->getId()
         );
@@ -69,7 +69,7 @@ class EntryController extends BaseController
 
         $this->authorizeEditAdminVisit(
             $blog->getEditAbility(),
-            'Blog ' . $entry->getBlogId() . ': ' . $entry->getId(),
+            $entry->getTitle(),
             $blog->getTitle() . ': ' . $entry->getTitle(),
             $entry
         );
