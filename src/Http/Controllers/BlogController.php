@@ -40,6 +40,7 @@ class BlogController extends BaseController
             $blog->getId()
         );
 
+        $this->messages->addErrorsFromSession();
         $this->messages->addFromSession();
 
         $entries = $entryProvider->getBuilder()->withUnpublished()->latestPublication()->get();

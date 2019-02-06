@@ -46,6 +46,7 @@ class EntryController extends BaseController
         );
 
         $this->buildCrumbtrail($blog, 'New entry');
+        $this->addMessagesFromSession();
 
         return view('blog-admin::entry.create', compact('entry', 'blog'));
     }
@@ -75,7 +76,7 @@ class EntryController extends BaseController
         );
 
         $this->buildCrumbtrail($blog, $entry->getTitle());
-        $this->messages->addFromSession();
+        $this->addMessagesFromSession();
 
         $itemHistoryWidget = $this->findOrRegisterAdminWidget(ItemHistoryWidget::class, 'kontourToolWidgets');
         $itemHistoryWidget->addCreatedEntry($entry->getAttribute($entry->getCreatedAtColumn()));
@@ -119,5 +120,10 @@ class EntryController extends BaseController
     {
         $this->crumbtrail->addLink(AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId())));
         $this->crumbtrail->addLink(AdminLink::create($currentPageName, url()->current()));
+    }
+
+    protected function addMessagesFromSession() {
+        $this->messages->addMessageIfSessionHasErrors('Validation failed, please correct the form input');
+        $this->messages->addFromSession();
     }
 }
