@@ -28,7 +28,7 @@
 @endsection
 
 @section('kontourToolFooter')
-  @unless($entry->isPublic())
+  @unless($entry->isPublic() or $entry->getPublished()->isFuture())
     <form action="{{ route('blog-admin.entries.destroy', $entry->getKey()) }}" method="POST">
       @method('DELETE')
       @csrf
