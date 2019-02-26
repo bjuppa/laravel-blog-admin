@@ -25,7 +25,7 @@
   </dl>
   @parent
   @can($blog->getCreateAbility(), $blog->getId())
-    <a href="{{ route('blog-admin.entries.create', $blog->getId()) }}">{{ __('Create new blog entry in') }} {{ $blog->getTitle() }}</a>
+    @include('kontour::buttons.link', ['href' => route('blog-admin.entries.create', $blog->getId()), 'description' => __('Create new blog entry in') . ' ' . $blog->getTitle()])
   @endcan
 @endsection
 

@@ -23,7 +23,7 @@
     @method('PUT')
     @csrf
     @include('blog-admin::entry.partials.formFields', ['model' => $entry])
-    <button type="submit">{{ __('Save changes to blog entry') }}</button>
+    @include('kontour::buttons.update', ['description' => __('Save changes to blog entry')])
   </form>
 @endsection
 
@@ -32,7 +32,7 @@
     <form action="{{ route('blog-admin.entries.destroy', $entry->getKey()) }}" method="POST">
       @method('DELETE')
       @csrf
-      <button type="submit" aria-label="{{ __('Delete blog entry') }} {{ $entry->getTitle() }}">{{ __('Delete blog entry') }}</button>
+      @include('kontour::buttons.destroy', ['description' => __('Delete blog entry') . ' ' . $entry->getTitle()])
     </form>
   @endunless
   @parent
