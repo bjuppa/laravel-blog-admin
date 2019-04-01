@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SaveBlogEntry extends FormRequest
+class BlogEntryRequest extends FormRequest
 {
     public function __construct(BlogRegistry $blogRegistry)
     {
@@ -24,7 +24,7 @@ class SaveBlogEntry extends FormRequest
     public function authorize()
     {
         if ($this->isMethod('POST')) {
-            return !$this->entry->exists;
+            return $this->user()->can($this->blog->getCreateAbility(), $this->entry);
         }
 
         return $this->user()->can($this->blog->getEditAbility(), $this->entry);
@@ -38,7 +38,7 @@ class SaveBlogEntry extends FormRequest
     public function rules()
     {
         $rules = [
-            'blog' => ['required', Rule::in($this->getValidBlogsForCurrentUser()->map->getId())],
+            'blog' => ['sometimes', Rule::in($this->getValidBlogsForCurrentUser()->map->getId())],
             'publish_after' => ['nullable', 'date'],
             'slug' => ['filled', 'alpha_dash', 'max:255'],
             'title' => ['filled', 'string', 'max:255'],
@@ -71,12 +71,27 @@ class SaveBlogEntry extends FormRequest
      */
     protected function prepareForValidation()
     {
+        $this->ensureRequestHasBlogAndEntryInstances();
+
+        $publish_after = $this->parseInBlogTimezone($this->publish_after);
+
+        if ($publish_after !== false) {
+            $this->merge([
+                'publish_after' => $publish_after,
+            ]);
+        }
+    }
+
+    public function ensureRequestHasBlogAndEntryInstances()
+    {
+        abort_unless($this->blog, 404, 'No blog specified');
+
         if (!$this->blog instanceof Blog) {
             $this->blog = $this->blogRegistry->get($this->blog);
         }
 
         if (!$this->blog) {
-            abort(404, 'Blog "' . e((string) $this->blog) . '" does not exist');
+            abort(404, 'Blog "' . e($this->blog) . '" does not exist');
         }
         abort_unless($this->blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
             500,
@@ -90,13 +105,8 @@ class SaveBlogEntry extends FormRequest
             );
         }
 
-        $publish_after = $this->parseInBlogTimezone($this->publish_after);
-
-        if ($publish_after !== false) {
-            $this->merge([
-                'publish_after' => $publish_after,
-            ]);
-        }
+        abort_if($this->isMethod('PATCH') and !$this->entry->exists, 405);
+        abort_if($this->isMethod('POST') and $this->entry->exists, 405);
     }
 
     public function getValidBlogsForCurrentUser()

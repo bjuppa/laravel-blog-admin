@@ -29,7 +29,7 @@
 
 @section('kontourToolFooter')
   @unless($entry->isPublic() or $entry->getPublished()->isFuture())
-    <form action="{{ route('blog-admin.entries.destroy', $entry->getKey()) }}" method="POST">
+    <form action="{{ route('blog-admin.entries.destroy', [$entry->getBlogId(), $entry->getKey()]) }}" method="POST">
       @method('DELETE')
       @csrf
       @include('kontour::buttons.destroy', ['description' => __('Delete blog entry') . ' ' . $entry->getTitle()])

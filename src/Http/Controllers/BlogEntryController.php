@@ -2,12 +2,11 @@
 
 namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 
-use Bjuppa\LaravelBlogAdmin\Http\Requests\SaveBlogEntry;
+use Bjuppa\LaravelBlogAdmin\Http\Requests\BlogEntryRequest;
 use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
-use Illuminate\Support\Facades\Auth;
 use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
@@ -29,93 +28,70 @@ class BlogEntryController extends BaseController
         $this->messages = $this->findOrRegisterAdminWidget(MessageWidget::class, 'kontourToolHeader');
     }
 
-    public function create($blog_id)
+    public function create(BlogEntryRequest $request)
     {
-        $blog = $this->blogRegistry->get($blog_id);
-        abort_unless($blog, 404, 'Blog "' . e($blog_id) . '" does not exist');
-
-        $entry = $blog->getEntryProvider()->getBlogEntryModel();
-
         $this->authorizeEditAdminVisit(
-            $blog->getCreateAbility(),
-            'New ' . $blog->getTitle() . ' entry',
-            $blog->getTitle() . ': New entry',
-            $blog->getId()
+            $request->blog->getCreateAbility(),
+            'New ' . $request->blog->getTitle() . ' entry',
+            $request->blog->getTitle() . ': New entry',
+            $request->blog->getId()
         );
 
-        $this->buildCrumbtrail($blog, 'New entry');
+        $this->buildCrumbtrail($request->blog, 'New entry');
         $this->addMessagesFromSession();
 
-        return view('blog-admin::entry.create', compact('entry', 'blog'));
+        return view('blog-admin::entry.create', ['entry' => $request->entry, 'blog' => $request->blog]);
     }
 
-    public function store(SaveBlogEntry $request)
+    public function store(BlogEntryRequest $request)
     {
-        //TODO: make sure this creates an instance of the Blog's entry provider's model
-        $entry = BlogEntry::create($request->validatedForModel());
+        $request->entry->fill($request->validatedForModel())->save();
 
-        return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]))
+        return redirect(route('blog-admin.entries.edit', [$request->entry->getBlogId(), $request->entry->getKey()]))
             ->with('status', 'Blog entry created');
     }
 
-    public function edit($blogId, $id)
+    public function edit(BlogEntryRequest $request)
     {
-        //TODO: make sure this finds an instance via the Blog's entry provider's model
-        $entry = BlogEntry::withUnpublished()->findOrFail($id);
-        if ($entry->getBlogId() != $blogId) {
-            return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
-        }
-
-        $blog = $this->blogRegistry->get($entry->getBlogId());
-
+        abort_unless($request->entry->exists, 404, 'Entry not found');
         $this->authorizeEditAdminVisit(
-            $blog->getEditAbility(),
-            $entry->getTitle(),
-            $blog->getTitle() . ': ' . $entry->getTitle(),
-            $entry
+            $request->blog->getEditAbility(),
+            $request->entry->getTitle(),
+            $request->blog->getTitle() . ': ' . $request->entry->getTitle(),
+            $request->entry
         );
 
-        $this->buildCrumbtrail($blog, $entry->getTitle());
+        $this->buildCrumbtrail($request->blog, $request->entry->getTitle());
         $this->addMessagesFromSession();
 
         $itemHistoryWidget = $this->findOrRegisterAdminWidget(ItemHistoryWidget::class, 'kontourToolWidgets');
-        $itemHistoryWidget->addCreatedEntry($entry->getAttribute($entry->getCreatedAtColumn()));
-        $itemHistoryWidget->addUpdatedEntry($entry->getAttribute($entry->getUpdatedAtColumn()));
+        $itemHistoryWidget->addCreatedEntry($request->entry->getAttribute($request->entry->getCreatedAtColumn()));
+        $itemHistoryWidget->addUpdatedEntry($request->entry->getAttribute($request->entry->getUpdatedAtColumn()));
 
-        $blog_options = $this->blogRegistry->all()->filter(function ($blog) {
-            return Auth::user()->can($blog->getCreateAbility(), $blog->getId())
-            and $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
-        })->mapWithKeys(function ($blog) {
-            return [$blog->getId() => $blog->getTitle()];
-        })->all();
-
-        return view('blog-admin::entry.edit', compact('entry', 'blog', 'blog_options'));
+        return view('blog-admin::entry.edit', [
+            'entry' => $request->entry,
+            'blog' => $request->blog,
+            'blog_options' => $request->getValidBlogsForCurrentUser()->mapWithKeys(function ($blog) {
+                return [$blog->getId() => $blog->getTitle()];
+            })->all(),
+        ]);
     }
 
-    public function update(SaveBlogEntry $request, $id)
+    public function update(BlogEntryRequest $request)
     {
-        //TODO: make sure this finds an instance of the Blog's entry provider's model
-        $entry = BlogEntry::withUnpublished()->findOrFail($id);
+        $request->entry->update($request->validatedForModel());
+        $request->entry->refresh();
 
-        $entry->update($request->validatedForModel());
-
-        return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]))
+        return redirect(route('blog-admin.entries.edit', [$request->entry->getBlogId(), $request->entry->getKey()]))
             ->with('status', 'Save successful');
     }
 
-    public function destroy($id)
+    public function destroy(BlogEntryRequest $request)
     {
-        //TODO: make sure this finds an instance of the Blog's entry provider's model
-        $entry = BlogEntry::withUnpublished()->findOrFail($id);
-        $blog = $this->blogRegistry->get($entry->getBlogId());
+        $request->entry->delete();
 
-        if ($blog->getEditAbility()) {
-            $this->authorize($blog->getEditAbility(), $entry);
-        }
-
-        $entry->delete();
-
-        return redirect(route('blog-admin.blogs.show', $entry->getBlogId()))->with('status', 'Deleted entry ' . $entry->getTitle());
+        return redirect(route('blog-admin.blogs.show', [$request->entry->getBlogId()]))
+            ->with('status', 'Deleted entry ' . $request->entry->getTitle());
     }
 
     protected function buildCrumbtrail(Blog $blog, $currentPageName)

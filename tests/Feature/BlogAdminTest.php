@@ -97,7 +97,7 @@ class BlogAdminTest extends IntegrationTest
         $entry = factory(BlogEntry::class)->create();
         $entry->refresh();
 
-        $response = $this->actingAs($this->user)->delete(route('blog-admin.entries.destroy', $entry->getKey()));
+        $response = $this->actingAs($this->user)->delete(route('blog-admin.entries.destroy', [$entry->getBlogId(), $entry->getKey()]));
 
         $response->assertRedirect(route('blog-admin.blogs.show', [$entry->getBlogId()]));
 
