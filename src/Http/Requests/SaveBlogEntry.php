@@ -84,7 +84,10 @@ class SaveBlogEntry extends FormRequest
         );
 
         if (!$this->entry instanceof BlogEntry) {
-            $this->entry = $this->blog->getEntryProvider()->getBlogEntryModel()->withUnpublished()->findOrNew($this->entry);
+            $this->entry = (
+                $this->blog->getEntryProvider()->getBlogEntryModel()->withUnpublished()->find($this->entry) ??
+                $this->blog->getEntryProvider()->getBlogEntryModel()
+            );
         }
 
         $publish_after = $this->parseInBlogTimezone($this->publish_after);
