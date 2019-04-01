@@ -38,7 +38,7 @@ class BlogEntryRequest extends FormRequest
     public function rules()
     {
         $rules = [
-            'blog' => ['sometimes', Rule::in($this->getValidBlogsForCurrentUser()->map->getId())],
+            'blog' => ['filled', Rule::in($this->getValidBlogsForCurrentUser()->map->getId())],
             'publish_after' => ['nullable', 'date'],
             'slug' => ['filled', 'alpha_dash', 'max:255'],
             'title' => ['filled', 'string', 'max:255'],
@@ -56,6 +56,7 @@ class BlogEntryRequest extends FormRequest
 
         if ($this->isMethod('POST')) {
             $rules = array_merge_recursive($rules, [
+                'blog' => ['required'],
                 'title' => ['required'],
                 'content' => ['required'],
             ]);
