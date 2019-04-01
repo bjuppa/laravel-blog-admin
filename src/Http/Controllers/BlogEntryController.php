@@ -4,8 +4,6 @@ namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 
 use Bjuppa\LaravelBlogAdmin\Http\Requests\BlogEntryRequest;
 use Bjuppa\LaravelBlog\Contracts\Blog;
-use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
-use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Routing\Controller as BaseController;
 use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
@@ -18,12 +16,8 @@ class BlogEntryController extends BaseController
 {
     use RegistersAdminWidgets, AuthorizesAdminRequests;
 
-    protected $blogRegistry;
-
-    public function __construct(BlogRegistry $blogRegistry)
+    public function __construct()
     {
-        $this->blogRegistry = $blogRegistry;
-
         $this->crumbtrail = $this->findOrRegisterAdminWidget(CrumbtrailWidget::class, 'kontourToolHeader');
         $this->messages = $this->findOrRegisterAdminWidget(MessageWidget::class, 'kontourToolHeader');
     }
