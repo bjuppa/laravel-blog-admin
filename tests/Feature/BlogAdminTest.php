@@ -73,7 +73,7 @@ class BlogAdminTest extends IntegrationTest
         $response = $this->actingAs($this->user)->get(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
 
         $response->assertStatus(200);
-        $response->assertSee('value="PUT"');
+        $response->assertSee('value="PATCH"');
     }
 
     public function test_entry_can_be_updated()
@@ -85,7 +85,7 @@ class BlogAdminTest extends IntegrationTest
             'title' => 'Replaced title',
             'blog' => $entry->blog,
         ];
-        $response = $this->actingAs($this->user)->put(route('blog-admin.entries.update', $entry->getKey()), $formData);
+        $response = $this->actingAs($this->user)->patch(route('blog-admin.entries.update', $entry->getKey()), $formData);
 
         $response->assertRedirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
         $entry->refresh();
