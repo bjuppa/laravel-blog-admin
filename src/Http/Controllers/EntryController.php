@@ -53,6 +53,7 @@ class EntryController extends BaseController
 
     public function store(StoreBlogEntry $request)
     {
+        //TODO: make sure this creates an instance of the Blog's entry provider's model
         $entry = BlogEntry::create($request->validatedForModel());
 
         return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]))
@@ -61,6 +62,7 @@ class EntryController extends BaseController
 
     public function edit($blogId, $id)
     {
+        //TODO: make sure this finds an instance via the Blog's entry provider's model
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
         if ($entry->getBlogId() != $blogId) {
             return redirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
@@ -94,6 +96,7 @@ class EntryController extends BaseController
 
     public function update(UpdateBlogEntry $request, $id)
     {
+        //TODO: make sure this finds an instance of the Blog's entry provider's model
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
 
         $entry->update($request->validatedForModel());
@@ -104,6 +107,7 @@ class EntryController extends BaseController
 
     public function destroy($id)
     {
+        //TODO: make sure this finds an instance of the Blog's entry provider's model
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
         $blog = $this->blogRegistry->get($entry->getBlogId());
 

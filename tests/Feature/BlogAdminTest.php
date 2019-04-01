@@ -91,4 +91,16 @@ class BlogAdminTest extends IntegrationTest
         $entry->refresh();
         $this->assertEquals('Replaced title', $entry->title);
     }
+
+    public function test_entry_can_be_deleted()
+    {
+        $entry = factory(BlogEntry::class)->create();
+        $entry->refresh();
+
+        $response = $this->actingAs($this->user)->delete(route('blog-admin.entries.destroy', $entry->getKey()));
+
+        $response->assertRedirect(route('blog-admin.blogs.show', [$entry->getBlogId()]));
+
+        $this->assertDatabaseMissing('blog_entries', ['id' => $entry->getKey()]);
+    }
 }

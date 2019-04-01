@@ -13,6 +13,7 @@ class UpdateBlogEntry extends SaveBlogEntry
      */
     public function authorize()
     {
+        //TODO: make sure this finds an instance of the Blog's entry provider's model
         $entry = BlogEntry::withUnpublished()->find($this->route('id'));
         $blog = $this->blogRegistry->get($entry->getBlogId());
 
