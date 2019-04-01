@@ -16,8 +16,7 @@ use Kontenta\Kontour\Contracts\CrumbtrailWidget;
 use Kontenta\Kontour\Contracts\ItemHistoryWidget;
 use Kontenta\Kontour\Contracts\MessageWidget;
 
-//TODO: rename EntryController to BlogEntryController
-class EntryController extends BaseController
+class BlogEntryController extends BaseController
 {
     use RegistersAdminWidgets, AuthorizesAdminRequests;
 
