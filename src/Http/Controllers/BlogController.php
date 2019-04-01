@@ -30,7 +30,7 @@ class BlogController extends BaseController
         abort_unless(
             $entryProvider instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
             500,
-            "Blog '" . $blog->getId() . "' is not configured with the Eloquent entry provider"
+            'Blog "' . e($blog->getId()) . '" is not configured with the Eloquent entry provider'
         );
 
         $this->authorizeShowAdminVisit(

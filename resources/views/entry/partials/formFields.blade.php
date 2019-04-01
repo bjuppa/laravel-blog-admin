@@ -2,7 +2,7 @@
 @include('kontour::forms.input', ['name' => 'title', 'controlAttributes' => ['required']])
 
 @if($entry->exists)
-  @if(count($blog_options) > 1)
+  @if(count($blog_options) > 1 and !$entry->isPublic())
     @include('kontour::forms.select', ['name' => 'blog', 'options' => $blog_options])
   @endif
   @include('kontour::forms.input', ['name' => 'slug'])
