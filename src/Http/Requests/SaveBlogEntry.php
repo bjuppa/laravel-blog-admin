@@ -2,27 +2,32 @@
 
 namespace Bjuppa\LaravelBlogAdmin\Http\Requests;
 
+use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
+use Bjuppa\LaravelBlog\Eloquent\AbstractBlogEntry as BlogEntry;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-abstract class SaveBlogEntry extends FormRequest
+class SaveBlogEntry extends FormRequest
 {
     public function __construct(BlogRegistry $blogRegistry)
     {
         $this->blogRegistry = $blogRegistry;
     }
 
-    public function prepareForValidation()
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
     {
-        $publish_after = $this->parseInBlogTimezone($this->publish_after);
-
-        if ($publish_after !== false) {
-            $this->merge([
-                'publish_after' => $publish_after,
-            ]);
+        if ($this->isMethod('POST')) {
+            return !$this->entry->exists;
         }
+
+        return $this->user()->can($this->blog->getEditAbility(), $this->entry);
     }
 
     /**
@@ -32,7 +37,7 @@ abstract class SaveBlogEntry extends FormRequest
      */
     public function rules()
     {
-        return [
+        $rules = [
             'blog' => ['required', Rule::in($this->getValidBlogsForCurrentUser()->map->getId())],
             'publish_after' => ['nullable', 'date'],
             'slug' => ['filled', 'alpha_dash', 'max:255'],
@@ -48,6 +53,47 @@ abstract class SaveBlogEntry extends FormRequest
             'json_meta_tags' => ['nullable', 'json'],
             'display_full_content_in_feed' => ['nullable', 'boolean'],
         ];
+
+        if ($this->isMethod('POST')) {
+            $rules = array_merge_recursive($rules, [
+                'title' => ['required'],
+                'content' => ['required'],
+            ]);
+        }
+
+        return $rules;
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return void
+     */
+    protected function prepareForValidation()
+    {
+        if (!$this->blog instanceof Blog) {
+            $this->blog = $this->blogRegistry->get($this->blog);
+        }
+
+        if (!$this->blog) {
+            abort(404, 'Blog "' . e((string) $this->blog) . '" does not exist');
+        }
+        abort_unless($this->blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
+            500,
+            'Blog "' . e($this->blog->getId()) . '" is not configured with the Eloquent entry provider'
+        );
+
+        if (!$this->entry instanceof BlogEntry) {
+            $this->entry = $this->blog->getEntryProvider()->getBlogEntryModel()->withUnpublished()->findOrNew($this->entry);
+        }
+
+        $publish_after = $this->parseInBlogTimezone($this->publish_after);
+
+        if ($publish_after !== false) {
+            $this->merge([
+                'publish_after' => $publish_after,
+            ]);
+        }
     }
 
     public function getValidBlogsForCurrentUser()
@@ -56,11 +102,6 @@ abstract class SaveBlogEntry extends FormRequest
             return $this->user()->can($blog->getCreateAbility(), $blog->getId())
             and $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
         });
-    }
-
-    public function getRequestedBlog()
-    {
-        return $this->blogRegistry->get($this->input('blog'));
     }
 
     public function parseInBlogTimezone($time)
@@ -81,7 +122,7 @@ abstract class SaveBlogEntry extends FormRequest
         }
 
         try {
-            return Carbon::parse($time, $this->getRequestedBlog()->getTimezone());
+            return Carbon::parse($time, $this->blog->getTimezone());
         } catch (\Exception $e) {
             return false;
         }

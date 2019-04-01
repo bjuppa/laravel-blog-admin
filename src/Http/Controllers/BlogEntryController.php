@@ -2,8 +2,7 @@
 
 namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 
-use Bjuppa\LaravelBlogAdmin\Http\Requests\StoreBlogEntry;
-use Bjuppa\LaravelBlogAdmin\Http\Requests\UpdateBlogEntry;
+use Bjuppa\LaravelBlogAdmin\Http\Requests\SaveBlogEntry;
 use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
@@ -50,7 +49,7 @@ class BlogEntryController extends BaseController
         return view('blog-admin::entry.create', compact('entry', 'blog'));
     }
 
-    public function store(StoreBlogEntry $request)
+    public function store(SaveBlogEntry $request)
     {
         //TODO: make sure this creates an instance of the Blog's entry provider's model
         $entry = BlogEntry::create($request->validatedForModel());
@@ -93,7 +92,7 @@ class BlogEntryController extends BaseController
         return view('blog-admin::entry.edit', compact('entry', 'blog', 'blog_options'));
     }
 
-    public function update(UpdateBlogEntry $request, $id)
+    public function update(SaveBlogEntry $request, $id)
     {
         //TODO: make sure this finds an instance of the Blog's entry provider's model
         $entry = BlogEntry::withUnpublished()->findOrFail($id);
@@ -125,7 +124,8 @@ class BlogEntryController extends BaseController
         $this->crumbtrail->addLink(AdminLink::create($currentPageName, url()->current()));
     }
 
-    protected function addMessagesFromSession() {
+    protected function addMessagesFromSession()
+    {
         $this->messages->addMessageIfSessionHasErrors('Validation failed, please correct the form input');
         $this->messages->addFromSession();
     }
