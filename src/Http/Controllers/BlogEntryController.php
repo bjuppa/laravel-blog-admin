@@ -39,7 +39,7 @@ class BlogEntryController extends BaseController
 
     public function store(BlogEntryRequest $request)
     {
-        $request->entry->fill($request->validatedForModel())->save();
+        $request->entry->fill($request->validated())->save();
 
         return redirect(route('blog-admin.entries.edit', [$request->entry->getBlogId(), $request->entry->getKey()]))
             ->with('status', 'Blog entry created');
@@ -73,7 +73,7 @@ class BlogEntryController extends BaseController
 
     public function update(BlogEntryRequest $request)
     {
-        $request->entry->update($request->validatedForModel());
+        $request->entry->update($request->validated());
         $request->entry->refresh();
 
         return redirect(route('blog-admin.entries.edit', [$request->entry->getBlogId(), $request->entry->getKey()]))
