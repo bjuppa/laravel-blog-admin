@@ -11,6 +11,7 @@
     'afterControl' => $blog->getTimezone()->getName(),
     'value' => $model['publish_after'] ? $blog->convertToBlogTimezone($model['publish_after'])->format('Y-m-d\TH:i') : '',
     'type' => 'datetime-local',
+    'controlAttributes' => ['size' => "16"]
   ])
 @endif
 
