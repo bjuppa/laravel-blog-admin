@@ -3,6 +3,7 @@
 namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
 use Kontenta\Kontour\Concerns\RegistersAdminWidgets;
@@ -23,13 +24,13 @@ class BlogController extends BaseController
 
     public function show($id)
     {
-        abort_unless($this->blogRegistry->has($id), 404);
+        abort_unless($this->blogRegistry->has($id), Response::HTTP_NOT_FOUND);
         $blog = $this->blogRegistry->get($id);
 
         $entryProvider = $blog->getEntryProvider();
         abort_unless(
             $entryProvider instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
-            500,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
             'Blog "' . e($blog->getId()) . '" is not configured with the Eloquent entry provider'
         );
 

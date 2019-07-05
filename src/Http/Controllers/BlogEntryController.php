@@ -4,6 +4,7 @@ namespace Bjuppa\LaravelBlogAdmin\Http\Controllers;
 
 use Bjuppa\LaravelBlogAdmin\Http\Requests\BlogEntryRequest;
 use Bjuppa\LaravelBlog\Contracts\Blog;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 use Kontenta\Kontour\AdminLink;
 use Kontenta\Kontour\Concerns\AuthorizesAdminRequests;
@@ -47,7 +48,7 @@ class BlogEntryController extends BaseController
 
     public function edit(BlogEntryRequest $request)
     {
-        abort_unless($request->entry->exists, 404, 'Entry not found');
+        abort_unless($request->entry->exists, Response::HTTP_NOT_FOUND, 'Entry not found');
         $this->authorizeEditAdminVisit(
             $request->blog->getEditAbility(),
             $request->entry->getTitle(),

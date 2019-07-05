@@ -7,6 +7,7 @@ use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\AbstractBlogEntry as BlogEntry;
 use FewAgency\Carbonator\Carbonator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 class BlogEntryRequest extends FormRequest
@@ -83,17 +84,17 @@ class BlogEntryRequest extends FormRequest
 
     public function ensureRequestHasBlogAndEntryInstances()
     {
-        abort_unless($this->blog, 404, 'No blog specified');
+        abort_unless($this->blog, Response::HTTP_NOT_FOUND, 'No blog specified');
 
         if (!$this->blog instanceof Blog) {
             $this->blog = $this->blogRegistry->get($this->blog);
         }
 
         if (!$this->blog) {
-            abort(404, 'Blog "' . e($this->blog) . '" does not exist');
+            abort(Response::HTTP_NOT_FOUND, 'Blog "' . e($this->blog) . '" does not exist');
         }
         abort_unless($this->blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
-            500,
+            Response::HTTP_INTERNAL_SERVER_ERROR,
             'Blog "' . e($this->blog->getId()) . '" is not configured with the Eloquent entry provider'
         );
 
@@ -104,8 +105,8 @@ class BlogEntryRequest extends FormRequest
             );
         }
 
-        abort_if($this->isMethod('PATCH') and !$this->entry->exists, 405);
-        abort_if($this->isMethod('POST') and $this->entry->exists, 405);
+        abort_if($this->isMethod('PATCH') and !$this->entry->exists, Response::HTTP_METHOD_NOT_ALLOWED);
+        abort_if($this->isMethod('POST') and $this->entry->exists, Response::HTTP_METHOD_NOT_ALLOWED);
     }
 
     public function getValidBlogsForCurrentUser()
