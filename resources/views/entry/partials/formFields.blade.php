@@ -21,8 +21,8 @@
   ])
     @slot('afterControl')
       <dl id="publish_afterTimezone" style="display: inline-block">
-        <dt hidden>Timezone</dt>
-        <dd>{{ $blog->getTimezone()->getName() }}</dd>
+        <dt hidden>{{ __('Timezone') }}</dt>
+        <dd lang="en">{{ $blog->getTimezone()->getName() }}</dd>
       </dl>
     @endslot
   @endcomponent
