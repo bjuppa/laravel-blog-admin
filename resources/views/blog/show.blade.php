@@ -16,7 +16,9 @@
     </div>
     <div>
       <dt>Updated</dt>
-      <dd><time datetime="{{ $blog->convertToBlogTimezone($blog->getUpdated())->toAtomString() }}">{{ $blog->getUpdated()->diffForHumans() }}</time></dd>
+      <dd>
+        @include('kontour::elements.time', ['carbon' => $blog->convertToBlogTimezone($blog->getUpdated())])
+      </dd>
     </div>
     <div>
       <dt>Timezone</dt>
