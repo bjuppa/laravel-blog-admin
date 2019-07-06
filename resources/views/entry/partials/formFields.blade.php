@@ -1,3 +1,7 @@
+<?php
+  $autofocusControlId = array_merge($errors->keys(), [null])[0];
+?>
+
 <input type="hidden" name="blog" value="{{ $entry->blog }}">
 @include('kontour::forms.input', ['name' => 'title', 'controlAttributes' => ['required']])
 
@@ -12,6 +16,8 @@
     'type' => 'datetime-local',
     'controlAttributes' => ['size' => "16"],
     'ariaDescribedById' => 'publish_afterTimezone',
+    'autofocusControlId' => $autofocusControlId,
+    'errors' => $errors,
   ])
     @slot('afterControl')
       <dl id="publish_afterTimezone" style="display: inline-block">
