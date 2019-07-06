@@ -6,13 +6,20 @@
     @include('kontour::forms.select', ['name' => 'blog', 'options' => $blog_options])
   @endif
   @include('kontour::forms.input', ['name' => 'slug'])
-  @include('kontour::forms.input', [
+  @component('kontour::forms.input', [
     'name' => 'publish_after',
-    'afterControl' => $blog->getTimezone()->getName(),
     'value' => $model['publish_after'] ? $blog->convertToBlogTimezone($model['publish_after'])->format('Y-m-d\TH:i') : '',
     'type' => 'datetime-local',
-    'controlAttributes' => ['size' => "16"]
+    'controlAttributes' => ['size' => "16"],
+    'ariaDescribedById' => 'publish_afterTimezone',
   ])
+    @slot('afterControl')
+      <dl id="publish_afterTimezone" style="display: inline-block">
+        <dt hidden>Timezone</dt>
+        <dd>{{ $blog->getTimezone()->getName() }}</dd>
+      </dl>
+    @endslot
+  @endcomponent
 @endif
 
 @include('kontour::forms.textarea', [
