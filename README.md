@@ -30,7 +30,7 @@ a package providing admin area tool utilities for Laravel.
 ## Troubleshooting
 
 If you can't log in to the Kontour admin area, look for solutions from
-[`kontenta/kontour`](https://packagist.org/packages/kontenta/kontour)].
+[`kontenta/kontour`](https://packagist.org/packages/kontenta/kontour).
 
 If you can't see your blogs after you are successfully logged in,
 make sure you have at least one Eloquent blog configured with
