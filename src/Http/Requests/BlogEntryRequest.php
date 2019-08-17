@@ -93,16 +93,16 @@ class BlogEntryRequest extends FormRequest
         if (!$this->blog) {
             abort(Response::HTTP_NOT_FOUND, 'Blog "' . e($this->blog) . '" does not exist');
         }
-        abort_unless($this->blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
+        abort_unless(
+            $this->blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider,
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'Blog "' . e($this->blog->getId()) . '" is not configured with the Eloquent entry provider'
         );
 
         if (!$this->entry instanceof BlogEntry) {
-            $this->entry = (
-                $this->blog->getEntryProvider()->getBlogEntryModel()->withUnpublished()->find($this->entry) ??
-                $this->blog->getEntryProvider()->getBlogEntryModel()
-            );
+            $this->entry =
+                $this->blog->getEntryProvider()->getBlogEntryModel()->withUnpublished()->find($this->entry)
+                ?? $this->blog->getEntryProvider()->getBlogEntryModel();
         }
 
         abort_if($this->isMethod('PATCH') and !$this->entry->exists, Response::HTTP_METHOD_NOT_ALLOWED);
@@ -113,7 +113,7 @@ class BlogEntryRequest extends FormRequest
     {
         return $this->blogRegistry->all()->filter(function ($blog) {
             return $this->user()->can($blog->getCreateAbility(), $blog->getId())
-            and $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
+                and $blog->getEntryProvider() instanceof \Bjuppa\LaravelBlog\Eloquent\BlogEntryProvider;
         });
     }
 }

@@ -91,7 +91,9 @@ class BlogEntryController extends BaseController
 
     protected function buildCrumbtrail(Blog $blog, $currentPageName)
     {
-        $this->crumbtrail->addLink(AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId())));
+        $this->crumbtrail->addLink(
+            AdminLink::create($blog->getTitle(), route('blog-admin.blogs.show', $blog->getId()))
+        );
         $this->crumbtrail->addLink(AdminLink::create($currentPageName, url()->current()));
     }
 
