@@ -1,5 +1,7 @@
 # laravel-blog-admin
 
+[![Build Status](https://travis-ci.org/bjuppa/laravel-blog-admin.svg?branch=master)](https://travis-ci.org/bjuppa/laravel-blog-admin)
+
 Optional admin interface for [bjuppa/laravel-blog](https://packagist.org/packages/bjuppa/laravel-blog).
 
 The admin pages of this packge depend on [kontenta/kontour](https://packagist.org/packages/kontenta/kontour),
