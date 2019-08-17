@@ -15,8 +15,8 @@
     }
   ],
   "require": {
-    "kontenta/kontour": "dev-master",
-    "fewagency/carbonator": "^1.1"
+    "fewagency/carbonator": "^1.1",
+    "kontenta/kontour": "^0.9.0"
   },
   "require-dev": {
     "orchestra/testbench": "~3.6",
