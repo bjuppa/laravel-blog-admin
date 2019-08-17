@@ -95,6 +95,18 @@ class BlogAdminTest extends IntegrationTest
         $this->assertEquals(new Carbon('tomorrow noon'), $entry->publish_after, 'Time was not parsed properly from string');
     }
 
+    public function test_entry_cant_be_moved_to_non_existing_blog() {
+        $entry = factory(BlogEntry::class)->create();
+        $entry->refresh();
+
+        $formData = [
+            'blog' => 'nonexisting',
+        ];
+        $response = $this->actingAs($this->user)->patch(route('blog-admin.entries.update', $entry->getKey()), $formData);
+
+        $response->assertStatus(404);
+    }
+
     public function test_entry_can_be_deleted()
     {
         $entry = factory(BlogEntry::class)->create();
