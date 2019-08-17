@@ -6,6 +6,7 @@ use Bjuppa\LaravelBlogAdmin\Tests\Feature\Fakes\User;
 use Bjuppa\LaravelBlogAdmin\Tests\IntegrationTest;
 use Bjuppa\LaravelBlog\Eloquent\BlogEntry;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Carbon;
 
 class BlogAdminTest extends IntegrationTest
 {
@@ -84,12 +85,14 @@ class BlogAdminTest extends IntegrationTest
         $formData = [
             'title' => 'Replaced title',
             'blog' => $entry->blog,
+            'publish_after' => 'tomorrow noon',
         ];
         $response = $this->actingAs($this->user)->patch(route('blog-admin.entries.update', $entry->getKey()), $formData);
 
         $response->assertRedirect(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
         $entry->refresh();
         $this->assertEquals('Replaced title', $entry->title);
+        $this->assertEquals(new Carbon('tomorrow noon'), $entry->publish_after, 'Time was not parsed properly from string');
     }
 
     public function test_entry_can_be_deleted()
