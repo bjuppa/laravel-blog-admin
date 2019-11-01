@@ -6,12 +6,10 @@ language: php
 
 matrix:
   include:
-    - php: 7.1
-      env: LARAVEL='5.7.*'
     - php: 7.2
       env: LARAVEL='5.8.*'
-    - php: 7.3
-      env: LARAVEL='5.8.*'
+    - php: 7.2
+      env: LARAVEL='6.*'
     - php: 7.3
       env: LARAVEL='6.*'
   fast_finish: true
