@@ -6,6 +6,8 @@
 <form action="{{ route('blog-admin.entries.store') }}" method="POST">
 @csrf
 @include('blog-admin::entry.partials.formFields', ['model' => $entry])
-@include('kontour::buttons.create', ['description' => __('Create new blog entry')])
+<div data-kontour-section="kontourStickyActions">
+  @include('kontour::buttons.create', ['description' => __('Create new blog entry')])
+</div>
 </form>
 @append

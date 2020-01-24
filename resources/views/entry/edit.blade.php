@@ -23,7 +23,9 @@
     @method('PATCH')
     @csrf
     @include('blog-admin::entry.partials.formFields', ['model' => $entry])
-    @include('kontour::buttons.update', ['description' => __('Save changes to blog entry')])
+    <div data-kontour-section="kontourStickyActions">
+      @include('kontour::buttons.update', ['description' => __('Save changes to blog entry')])
+    </div>
   </form>
 @endsection
 
