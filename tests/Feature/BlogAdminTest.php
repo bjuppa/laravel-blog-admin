@@ -32,7 +32,7 @@ class BlogAdminTest extends IntegrationTest
     {
         $response = $this->actingAs($this->user)->get(route('blog-admin.blogs.show', 'main'));
 
-        $response->assertSee('>Main Blog</a>');
+        $response->assertSee('>Main Blog</a>', false);
     }
 
     public function test_show_blog_page()
@@ -41,9 +41,9 @@ class BlogAdminTest extends IntegrationTest
         $response = $this->actingAs($this->user)->get(route('blog-admin.blogs.show', 'main'));
 
         $response->assertStatus(200);
-        $response->assertSee('>Main Blog</h1>');
-        $response->assertSee('>' . $entry->getTitle() . '</a>');
-        $response->assertSee('href="' . route('blog-admin.entries.create', 'main') . '"');
+        $response->assertSee('>Main Blog</h1>', false);
+        $response->assertSee('>' . $entry->getTitle() . '</a>', false);
+        $response->assertSee('href="' . route('blog-admin.entries.create', 'main') . '"', false);
     }
 
     public function test_create_entry_page()
@@ -51,7 +51,7 @@ class BlogAdminTest extends IntegrationTest
         $response = $this->actingAs($this->user)->get(route('blog-admin.entries.create', 'main'));
 
         $response->assertStatus(200);
-        $response->assertSee('value="main"');
+        $response->assertSee('value="main"', false);
     }
 
     public function test_entry_can_be_stored()
@@ -74,7 +74,7 @@ class BlogAdminTest extends IntegrationTest
         $response = $this->actingAs($this->user)->get(route('blog-admin.entries.edit', [$entry->getBlogId(), $entry->getKey()]));
 
         $response->assertStatus(200);
-        $response->assertSee('value="PATCH"');
+        $response->assertSee('value="PATCH"', false);
     }
 
     public function test_entry_can_be_updated()
@@ -95,7 +95,8 @@ class BlogAdminTest extends IntegrationTest
         $this->assertEquals(new Carbon('tomorrow noon'), $entry->publish_after, 'Time was not parsed properly from string');
     }
 
-    public function test_entry_cant_be_moved_to_non_existing_blog() {
+    public function test_entry_cant_be_moved_to_non_existing_blog()
+    {
         $entry = factory(BlogEntry::class)->create();
         $entry->refresh();
 
