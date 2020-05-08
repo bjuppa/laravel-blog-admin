@@ -26,7 +26,7 @@ class BlogAdminServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      *
      */
-    public function boot(BlogRegistry $blogRegistry, AdminBootManager $adminBootManager)
+    public function boot(AdminBootManager $adminBootManager)
     {
         $this->registerAdminRoutes(__DIR__ . '/../routes/blog-admin.php');
         $this->registerResources();
