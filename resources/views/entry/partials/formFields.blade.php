@@ -14,8 +14,7 @@
     'name' => 'publish_after',
     'value' => $model['publish_after'] ? $blog->convertToBlogTimezone($model['publish_after'])->format('Y-m-d\TH:i') : '',
     'type' => 'datetime-local',
-    'controlAttributes' => ['size' => "16"],
-    'ariaDescribedById' => 'publish_afterTimezone',
+    'controlAttributes' => ['size' => "16", 'aria-describedby' => 'publish_afterTimezone'],
     'autofocusControlId' => $autofocusControlId,
     'errors' => $errors,
   ])

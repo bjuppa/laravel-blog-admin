@@ -16,7 +16,7 @@
   ],
   "require": {
     "fewagency/carbonator": "^1.1",
-    "kontenta/kontour": "^0.9.0",
+    "kontenta/kontour": "^1.0",
     "bjuppa/laravel-blog": "^1.3"
   },
   "require-dev": {
