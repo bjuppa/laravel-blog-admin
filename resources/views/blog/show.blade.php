@@ -2,6 +2,8 @@
 
 @extends($view_manager->toolLayout())
 
+@section('title', implode(' | ', [$blog->getTitle(), 'Blog', config('kontour.title')]))
+
 @section('kontourToolHeader')
   <h1>{{ $blog->getTitle() }}</h1>
   <dl lang="en" style="display: grid; grid-gap: 1rem; grid-template-columns: repeat(auto-fit, minmax({{ strlen($blog->urlToFeed()) }}ch, 1fr));">

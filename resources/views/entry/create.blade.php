@@ -2,6 +2,8 @@
 
 @extends($view_manager->toolLayout())
 
+@section('title', implode(' | ', [__('New entry'), $blog->getTitle(), config('kontour.title')]))
+
 @section('kontourToolMain')
 <form action="{{ route('blog-admin.entries.store') }}" method="POST">
 @csrf
