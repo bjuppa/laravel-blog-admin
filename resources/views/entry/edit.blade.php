@@ -2,6 +2,8 @@
 
 @extends($view_manager->toolLayout())
 
+@section('title', implode(' | ', [$entry->getTitle(), $blog->getTitle() . ' entry', config('kontour.title')]))
+
 @section('kontourToolHeader')
   @parent
   <p lang="en">

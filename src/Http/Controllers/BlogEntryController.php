@@ -28,11 +28,11 @@ class BlogEntryController extends BaseController
         $this->authorizeEditAdminVisit(
             $request->blog->getCreateAbility(),
             'New ' . $request->blog->getTitle() . ' entry',
-            $request->blog->getTitle() . ': New entry',
+            $request->blog->getTitle() . ': ' . __('New entry'),
             $request->blog->getId()
         );
 
-        $this->buildCrumbtrail($request->blog, 'New entry');
+        $this->buildCrumbtrail($request->blog, __('New entry'));
         $this->addMessagesFromSession();
 
         return view('blog-admin::entry.create', ['entry' => $request->entry, 'blog' => $request->blog]);
