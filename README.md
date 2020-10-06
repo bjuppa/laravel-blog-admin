@@ -4,7 +4,7 @@
 
 Optional admin interface for [bjuppa/laravel-blog](https://packagist.org/packages/bjuppa/laravel-blog).
 
-The admin pages of this packge depend on [kontenta/kontour](https://packagist.org/packages/kontenta/kontour),
+The admin pages of this package depend on [kontenta/kontour](https://packagist.org/packages/kontenta/kontour),
 a package providing admin area tool utilities for Laravel.
 
 ## Usage
