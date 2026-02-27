@@ -32,7 +32,7 @@ Automatic attempt to fix some reported coding standard violations can be run wit
 
 ## Continuous integration
 
-[Travis CI](https://travis-ci.org/bjuppa/laravel-blog-admin) is set up to run tests on multiple versions of PHP and Laravel
+[GitHub Actions](https://github.com/bjuppa/laravel-blog-admin/actions) is set up to run tests on multiple versions of PHP and Laravel
 whenever a git push or a PR is made.
 
 ## Compiled views
