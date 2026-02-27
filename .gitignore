@@ -10,3 +10,4 @@ Thumbs.db
 /build
 .phpunit.result.cache
 /dist/mix-manifest.json
+.phpunit.cache/test-results
