@@ -5,7 +5,7 @@ namespace Bjuppa\LaravelBlogAdmin\Http\Requests;
 use Bjuppa\LaravelBlog\Contracts\Blog;
 use Bjuppa\LaravelBlog\Contracts\BlogRegistry;
 use Bjuppa\LaravelBlog\Eloquent\AbstractBlogEntry as BlogEntry;
-use FewAgency\Carbonator\Carbonator;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
@@ -75,7 +75,14 @@ class BlogEntryRequest extends FormRequest
     {
         $this->ensureRequestHasBlogAndEntryInstances();
 
-        if ($publish_after = Carbonator::parseToDefaultTz($this->publish_after, $this->blog->getTimezone())) {
+        try {
+            $publish_after = is_string($this->publish_after) && strlen(trim($this->publish_after))
+                ? Carbon::parse($this->publish_after, $this->blog->getTimezone())->setTimezone(config('app.timezone'))
+                : null;
+        } catch (\Exception $e) {
+            $publish_after = null;
+        }
+        if ($publish_after) {
             $this->merge([
                 'publish_after' => $publish_after,
             ]);
